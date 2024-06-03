@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <CustomLevels>
+        <CustomLevel name="LEVEL_600" intLevel="600" />
+        <CustomLevel name="LEVEL_550" intLevel="550" />
+        <CustomLevel name="LEVEL_500" intLevel="500" />
+        <CustomLevel name="LEVEL_450" intLevel="450" />
+        <CustomLevel name="LEVEL_400" intLevel="400" />
+        <CustomLevel name="LEVEL_350" intLevel="350" />
+        <CustomLevel name="LEVEL_300" intLevel="300" />
+        <CustomLevel name="LEVEL_250" intLevel="250" />
+        <CustomLevel name="LEVEL_200" intLevel="200" />
+        <CustomLevel name="LEVEL_150" intLevel="150" />
+        <CustomLevel name="LEVEL_100" intLevel="100" />
+        <CustomLevel name="LEVEL_50" intLevel="50" />
+    </CustomLevels>
+
+    <Appenders>
+        <RollingFile name="RollingFileAppender" fileName="logs/application.log"
+                     filePattern="logs/application-%i.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB" />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="Logger1" level="LEVEL_600" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger2" level="LEVEL_550" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger3" level="LEVEL_500" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger4" level="LEVEL_450" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger5" level="LEVEL_400" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger6" level="LEVEL_350" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger7" level="LEVEL_300" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger8" level="LEVEL_250" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger9" level="LEVEL_200" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger10" level="LEVEL_150" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger11" level="LEVEL_100" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Logger name="Logger12" level="LEVEL_50" additivity="false">
+            <AppenderRef ref="FileAppender" />
+        </Logger>
+
+        <Root level="trace">
+            <AppenderRef ref="FileAppender" />
+        </Root>
+    </Loggers>
+</Configuration>
