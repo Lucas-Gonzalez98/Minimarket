@@ -50,12 +50,12 @@ public class Metodos extends DAO {
                     + "nombre VARCHAR(100) NOT NULL, "
                     + "precio DECIMAL(10, 2) NOT NULL, "
                     + "stock INT NOT NULL)";
-            String crearTablaCliente = "CREATE TABLE IF NOT EXISTS Cliente (" //LISTO
+            String crearTablaCliente = "CREATE TABLE IF NOT EXISTS Cliente ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
                     + "nombre VARCHAR(100) NOT NULL, "
                     + "apellido VARCHAR(100) NOT NULL, "
                     + "direccion VARCHAR(200) DEFAULT NULL)";
-            String crearTablaEmpleado = "CREATE TABLE IF NOT EXISTS Empleado (" //LISTO
+            String crearTablaEmpleado = "CREATE TABLE IF NOT EXISTS Empleado ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
                     + "nombre VARCHAR(100) NOT NULL, "
                     + "apellido VARCHAR(100) NOT NULL, "
