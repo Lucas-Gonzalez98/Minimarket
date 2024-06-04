@@ -18,7 +18,7 @@ public class Main {
         int opcion;
         Metodos mt = Metodos.getInstance();
         mt.crearTablas();
-        mt.insertarDatos();
+        //mt.insertarDatos();
 
         do {
             System.out.println("Menú Principal");
