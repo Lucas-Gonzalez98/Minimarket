@@ -40,6 +40,13 @@ public class Metodos extends DAO {
         }
         return instance;
     }
+    public void ingresoDePagos() {
+        pagos.add(50000.00);
+        pagos.add(90000.00);
+        pagos.add(120000.00);
+        pagos.add(70000.00);
+    }
+
     public void crearTablas() {
         try {
             System.out.println("Creando tablas...");
@@ -264,13 +271,41 @@ public class Metodos extends DAO {
         System.out.println("Ingrese la fecha de consulta (yyyy-mm-dd):");
         String fechaStr = scanner.nextLine();
         Date fecha = Date.valueOf(fechaStr);
-
         ventaModelo.buscarVentaDiaria(fecha);
     }
-    public void balance() { //TOPO
-        System.out.println("Ha seleccionado balance (mostrar ganancias y pérdidas).");
-        //codigo
+    public void balance() {
+        try {
+            System.out.println("Ha seleccionado balance (mostrar ganancias y pérdidas).");
+            ArrayList<Venta> ventas = ventaModelo.obtenerVentas();
+            ArrayList<Comanda> comandas = comandaModelo.obtenerComandas();
+            double totalPagosDeuda = 0;
+            double totalVentas = 0;
+            double totalComandas = 0;
+            for (Double pago : pagos){
+                totalPagosDeuda += pago;
+            }
+            for (Venta venta : ventas) {
+                totalVentas += venta.getTotal();
+            }
+            for (Comanda comanda : comandas) {
+                totalComandas += comanda.getCantidad() * comanda.getPrecioComanda();
+            }
+            double balanceFinal = totalComandas + totalVentas - totalPagosDeuda;
+
+            System.out.println("===== Balance =====");
+            System.out.println("Ingresos:");
+            System.out.println("Total de Ventas: $" + totalVentas);
+            System.out.println("Total de Comandas: $" + totalComandas);
+            System.out.println("-------------------");
+            System.out.println("Egresos:");
+            System.out.println("Total de Pagos de Deuda: $" + totalPagosDeuda);
+            System.out.println("-------------------");
+            System.out.println("Balance Final: $" + balanceFinal);
+        }catch (Exception e){
+            System.out.println("Error al calcular el balance: " + e.getMessage());
+        }
     }
+
     public void solicitarComanda() {
         System.out.println("Ha seleccionado solicitar una comanda a la cocina.");
         //codigo

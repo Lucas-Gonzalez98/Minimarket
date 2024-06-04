@@ -22,7 +22,13 @@ public class Comanda {
     }
     public Comanda() {
     }
-
+    public Comanda(int cantidad, double precioComanda){
+        this.cantidad = cantidad;
+        this.precioComanda = precioComanda;
+    }
+    public Comanda (double precioComanda){
+        this.precioComanda = precioComanda;
+    }
     public String getNombreComanda() {
         return nombreComanda;
     }

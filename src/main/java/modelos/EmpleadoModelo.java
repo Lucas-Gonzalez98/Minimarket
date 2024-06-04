@@ -24,18 +24,6 @@ public class EmpleadoModelo {
     public void insertarDatosEmpleados(Empleado empleado) throws Exception {
         empleadoDao.insertarDatosEmpleados(empleado);
     }
-    public void ingresarEmpleado(Empleado empleado) throws Exception {
-        empleadoDao.ingresarEmpleado(empleado);
-    }
-
-    public void modificarEmpleadoCargo(Empleado empleado) throws Exception {
-        empleadoDao.modificarEmpleadoCargo(empleado);
-    }
-
-    public void modificarEmpleadoSalario(Empleado empleado) throws Exception {
-        empleadoDao.modificarEmpleadoSalario(empleado);
-    }
-
     public void listarEmpleados(){
         empleadoDao.listarEmpleados();
     }

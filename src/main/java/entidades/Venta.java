@@ -24,11 +24,12 @@ public class Venta {
     }
     public Venta() {
     }
-
+    public Venta(double total){
+        this.total = total;
+    }
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -82,11 +83,11 @@ public class Venta {
         this.fecha = fecha;
     }
 
-    public double gettotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void settotal(double total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 

@@ -33,8 +33,6 @@ public class VentaDao extends DAO{
     public void setVentaModelo(VentaModelo ventaModelo) {
         this.ventaModelo = ventaModelo;
     }
-
-
     public void insertarDatosVentas(Venta venta) throws Exception {
         try{
             String sql = "INSERT INTO Venta (producto_id, cliente_id, empleado_id, cantidad, fecha, total) VALUES (?, ?, ?, ?, ?, ?)";
@@ -258,5 +256,19 @@ public class VentaDao extends DAO{
             System.out.println("Error al buscar venta mensual. " + e.getMessage());
         }
     }
-
+    public ArrayList<Venta> obtenerVentas() throws Exception {
+        String ventaTotal = "SELECT total FROM Venta";
+        ArrayList<Venta> ventas = new ArrayList<>();
+        try (Connection conexion = conectarBase();
+             PreparedStatement preparedStatement = conexion.prepareStatement(ventaTotal);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                double total = resultSet.getDouble("total");
+                ventas.add(new Venta(total));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ventas;
+    }
 }

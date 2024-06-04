@@ -24,7 +24,10 @@ public class ComandaModelo {
     public void insertarDatosComanda(Comanda comanda) throws Exception{
         comandaDao.insertarDatosComandas(comanda);
     }
-
+    public ArrayList<Comanda> obtenerComandas() throws Exception{
+        ArrayList<Comanda> comandas = comandaDao.obtenerComandas();
+        return comandas;
+    }
     public void platoMasPedido(){
         comandaDao.platoMasPedido();
     }

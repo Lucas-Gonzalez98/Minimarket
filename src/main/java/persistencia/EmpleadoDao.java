@@ -52,60 +52,6 @@ public class EmpleadoDao extends DAO{
             System.out.println(e.getMessage());
         }
     }
-    public void ingresarEmpleado(Empleado empleado) throws Exception {
-        String sql = "INSERT INTO Empleado(nombre,apellido,cargo,salario) VALUES('" + empleado.getNombre() + "', '" + empleado.getApellido() + "', '" + empleado.getCargo() + "', '" + empleado.getSalario() + "')";
-        insertarModificarEliminar(sql);
-    }
-
-    public void modificarEmpleadoCargo(Empleado empleado) throws Exception {
-        String sql = "UPDATE Empleado SET cargo = '" + empleado.getCargo() + "' WHERE id = '" + empleado.getId() + "'";
-        insertarModificarEliminar(sql);
-    }
-
-    public void modificarEmpleadoSalario(Empleado empleado) throws Exception {
-        String sql = "UPDATE Empleado SET salario = '" + empleado.getSalario() + "' WHERE id = '" + empleado.getId() + "'";
-        insertarModificarEliminar(sql);
-    }
-
-    public void eliminarEmpleadoId(Empleado empleado) throws Exception {
-        String sql = "DELETE FROM Empleado WHERE id ='" + empleado.getId() + "' ";
-        insertarModificarEliminar(sql);
-    }
-
-    public Empleado buscarEmpleadoPorId(int id) throws Exception {
-        String sql = "SELECT * FROM Empleado WHERE id = '" + id + "'";
-        consultarBase(sql);
-        while (resultado.next()) {
-            Empleado empleado = new Empleado();
-            empleado.setId(id);
-            empleado.setNombre(resultado.getString(2));
-            empleado.setApellido(resultado.getString(3));
-            empleado.setCargo(resultado.getString(4));
-            empleado.setSalario(resultado.getInt(5));
-            return empleado;
-        }
-        return null;
-    }
-
-    public ArrayList<Empleado> buscarEmpleados() throws Exception {
-        String sql = "SELECT * FROM Empleado";
-        consultarBase(sql);
-        ArrayList<Empleado> empleados = new ArrayList();
-        while (resultado.next()) {
-            Empleado empleado = new Empleado();
-            empleado.setId(resultado.getInt(1));
-            empleado.setNombre(resultado.getString(2));
-            empleado.setApellido(resultado.getString(3));
-            empleado.setCargo(resultado.getString(4));
-            empleado.setSalario(resultado.getInt(5));
-            empleados.add(empleado);
-        }
-        if (empleados.size() == 0) {
-            return null;
-        }
-        return empleados;
-    }
-
     public void listarEmpleados(){
         String listaEmpleados = "SELECT id, nombre, apellido FROM Empleado";
 

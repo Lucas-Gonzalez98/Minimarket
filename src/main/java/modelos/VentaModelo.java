@@ -36,6 +36,8 @@ public class VentaModelo {
     public void buscarVentaMensual(String mes) throws Exception{
         ventaDao.buscarVentaMensual(mes);
     }
-
-
+    public ArrayList<Venta> obtenerVentas() throws Exception{
+        ArrayList<Venta> ventas = ventaDao.obtenerVentas();
+        return ventas;
+    }
 }

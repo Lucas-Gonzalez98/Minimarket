@@ -1,8 +1,7 @@
 package persistencia;
 
+import entidades.*;
 import entidades.Comanda;
-import entidades.Cliente;
-import entidades.Empleado;
 import modelos.ClienteModelo;
 import modelos.ComandaModelo;
 import modelos.EmpleadoModelo;
@@ -39,13 +38,14 @@ public class ComandaDao extends DAO {
             Random random = new Random();
 
             String[] NOMBRES = {"Milanesas con papas fritas", "Hamburguesa con papas", "Pancho con papas", "Pizza"};
-            for (int i = 0; i < 4; i++) {
+            Double[] PRECIOS = {10000.00, 8000.00, 6500.00, 7000.00};
+            for (int i = 0; i < 13; i++) {
                 int clienteId = random.nextInt(15) + 1;
                 int empleadoId = random.nextInt(4) + 1;
                 Date fecha = Date.valueOf("2024-05-" + (random.nextInt(31) + 1));
                 int cantidad = random.nextInt(5) + 1;
-                double precio = (random.nextInt(9001) + 3000) + random.nextDouble();
-                String nombre = NOMBRES[i];
+                double precio = PRECIOS[random.nextInt(PRECIOS.length)];
+                String nombre = NOMBRES[random.nextInt(NOMBRES.length)];
                 double total = precio * cantidad;
 
                 preparedStatement.setInt(1, clienteId);
@@ -62,7 +62,22 @@ public class ComandaDao extends DAO {
             System.out.println(e.getMessage());
         }
     }
-
+    public ArrayList<Comanda> obtenerComandas() throws Exception {
+        String comandaVentas = "SELECT cantidad, precioComanda FROM Comanda";
+        ArrayList<Comanda> comandas = new ArrayList<>();
+        try (Connection conexion = conectarBase();
+             PreparedStatement preparedStatement = conexion.prepareStatement(comandaVentas);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                int cantidad = resultSet.getInt("cantidad");
+                double precioComanda = resultSet.getDouble("precioComanda");
+                comandas.add(new Comanda(cantidad, precioComanda));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return comandas;
+    }
     public void platoMasPedido(){
         String platoMasPedido = "";
         int cantidad = 0;
@@ -88,5 +103,7 @@ public class ComandaDao extends DAO {
         //return "hola";
         //return platoMasPedido + " (" + maxConteo + " pedidos)";
     }
+
+
 }
 

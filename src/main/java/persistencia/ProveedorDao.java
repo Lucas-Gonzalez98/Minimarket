@@ -20,7 +20,6 @@ public class ProveedorDao extends DAO {
         }
         return instance;
     }
-
     public void setProveedorModelo(ProveedorModelo proveedorModelo) {
         this.proveedorModelo = proveedorModelo;
     }
