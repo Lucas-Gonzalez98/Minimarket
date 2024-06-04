@@ -18,14 +18,16 @@ public class Main {
         int opcion;
         Metodos mt = Metodos.getInstance();
         mt.crearTablas();
-        mt.insertarDatos();
+        //mt.insertarDatos();
 
         do {
+            //prueba git
+            System.out.println("");
             System.out.println("Menú Principal");
             System.out.println("1. Vender/Cobrar un producto"); // LISTO FALTA LOGGS
             System.out.println("2. Ingreso de mercadería"); //LISTO FALTA LOGGS
             System.out.println("3. Pago a proveedor"); //LISTO FALTA LOGGS
-            System.out.println("4. Consulta de ventas");
+            System.out.println("4. Consulta de ventas"); // LISTO
             System.out.println("5. Balance (mostrar ganancias y pérdidas)");
             System.out.println("6. Solicitar una comanda a la cocina"); //LOGGS
             System.out.println("7. Pagar cuenta"); //LOGGS

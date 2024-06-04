@@ -253,13 +253,14 @@ public class Metodos extends DAO {
             System.out.println();
         } while (segundaOpcion != 3);
     }
-    public void consultaVentasMensual() {
+    public void consultaVentasMensual() throws Exception {
         System.out.println("Ha seleccionado consulta de ventas mensual.");
-        //codigo
+        System.out.println("Ingrese el mes deseado: ");
+        String mes = scanner.nextLine();
+
+        ventaModelo.buscarVentaMensual(mes);
     }
     public void consultaVentasDiaria() throws Exception {
-        System.out.println("Ha seleccionado consulta de ventas diaria.");
-
         System.out.println("Ingrese la fecha de consulta (yyyy-mm-dd):");
         String fechaStr = scanner.nextLine();
         Date fecha = Date.valueOf(fechaStr);

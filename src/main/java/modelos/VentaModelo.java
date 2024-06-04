@@ -33,5 +33,9 @@ public class VentaModelo {
         ventaDao.buscarVentaDiaria(fecha);
     }
 
+    public void buscarVentaMensual(String mes) throws Exception{
+        ventaDao.buscarVentaMensual(mes);
+    }
+
 
 }
