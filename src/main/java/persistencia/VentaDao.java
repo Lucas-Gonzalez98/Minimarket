@@ -103,12 +103,12 @@ public class VentaDao extends DAO{
     }
 
     public void ingresarVenta(int idProducto, String apellidoCliente, String nombreCliente, String nombreEmpleado, int cantidad, Date fecha) throws Exception {
-        String buscarProducto = "SELECT id, stock FROM Producto WHERE id = ?";
+        String buscarProducto = "SELECT id, nombre, precio, stock FROM Producto WHERE id = ?";
         String buscarCliente = "SELECT id FROM Cliente WHERE nombre = ? AND apellido = ?";
-        String buscarEmpleado = "SELECT id FROM Empleado WHERE nombre = ?";
+        String buscarEmpleado = "SELECT id, apellido, cargo FROM Empleado WHERE nombre = ?";
         String actualizarStockProducto = "UPDATE Producto SET stock = stock - ? WHERE id = ?";
         String insertarCliente = "INSERT INTO Cliente (nombre, apellido, direccion) VALUES (?, ?, ?)";
-        String insertarVenta = "INSERT INTO Venta (producto_id, cliente_id, empleado_id, cantidad, fecha, precio) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertarVenta = "INSERT INTO Venta (producto_id, cliente_id, empleado_id, cantidad, fecha, total) VALUES (?, ?, ?, ?, ?, ?)";
         Scanner scanner = new Scanner(System.in);
         try (Connection connection = conectarBase();
              PreparedStatement preparedStatementBuscarProducto = connection.prepareStatement(buscarProducto);
@@ -126,6 +126,7 @@ public class VentaDao extends DAO{
                 return;
             }
             int stockProducto = resultSetProducto.getInt("stock");
+            String nombreProducto = resultSetProducto.getString("nombre");
 
             if (cantidad > stockProducto) {
                 System.out.println("No hay suficiente stock del producto con ID: " + idProducto);
@@ -180,8 +181,9 @@ public class VentaDao extends DAO{
             System.out.println("Empleado: " + nombreEmpleado + " " + apellidoEmpleado);
             System.out.println("Cargo del empleado: " + cargoEmpleado);
             System.out.println("Cliente: " + nombreCliente + " " + apellidoCliente);
-            System.out.println("Producto ID: " + idProducto);
             System.out.println("Fecha: " + fecha);
+            System.out.println("Producto ID: " + idProducto + " Nombre Producto: " + nombreProducto + " Precio Producto: " + precioProducto);
+            System.out.println("Cantidad: " + cantidad);
             System.out.println("Total: " + totalVenta);
 
         } catch (Exception e) {

@@ -51,27 +51,27 @@ public class ProductoDao extends DAO{
         }
     }
 
-    public void ingresarMercaderia(String nombreProducto, int cantidad) throws SQLException {
-        String sql = "UPDATE Producto SET stock = stock + ? WHERE nombre = ?";
+    public void ingresarMercaderia(int id, int cantidad) throws SQLException {
+        String cambiarStock = "UPDATE Producto SET stock = stock + ? WHERE id = ?";
         try (Connection connection = conectarBase();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(cambiarStock)) {
             preparedStatement.setInt(1, cantidad);
-            preparedStatement.setString(2, nombreProducto);
+            preparedStatement.setInt(2, id);
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas > 0) {
-                System.out.println("Stock del producto \"" + nombreProducto + "\" actualizado correctamente.");
+                System.out.println("Stock actualizado correctamente.");
             } else {
-                System.out.println("No se encontró el producto con nombre: " + nombreProducto);
+                System.out.println("No se encontró el ID: " + id);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());;
         }
     }
     public void listarProductos() {
-        String sql = "SELECT id, nombre FROM Producto";
+        String listaProductos = "SELECT id, nombre FROM Producto";
 
-        try (Connection connection = conectarBase();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try (Connection coneccion = conectarBase();
+             PreparedStatement preparedStatement = coneccion.prepareStatement(listaProductos);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {

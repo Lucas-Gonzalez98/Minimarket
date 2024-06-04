@@ -22,8 +22,8 @@ public class ProductoModelo {
     public void insertarProductos(Producto producto) throws Exception {
         productoDao.insertarProductos(producto);
     }
-    public void ingresarMercaderia(String nombreProducto, int cantidad) throws Exception {
-        productoDao.ingresarMercaderia(nombreProducto, cantidad);
+    public void ingresarMercaderia(int id, int cantidad) throws Exception {
+        productoDao.ingresarMercaderia(id, cantidad);
     }
     public void listarProductos(){
         productoDao.listarProductos();

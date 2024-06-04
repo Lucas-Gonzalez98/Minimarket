@@ -192,7 +192,7 @@ public class Metodos extends DAO {
         System.out.println("Lista de productos:");
         proveedorModelo.listarProveedores();
         System.out.println();
-        System.out.println("Ingrese el nombre del proveedor:");
+        System.out.println("Ingrese el nombre del proveedor como sale en la lista de arriba:");
         String nombreProveedor = scanner.nextLine();
         System.out.println("Ingrese la cantidad a pagar:");
         double cantidadPago = scanner.nextDouble();
@@ -210,13 +210,14 @@ public class Metodos extends DAO {
         System.out.println("Lista de productos:");
         productoModelo.listarProductos();
         System.out.println();
-        System.out.println("Ingrese el nombre del producto:");
-        String nombreProducto = scanner.nextLine();
+        System.out.println("Ingrese el ID del producto:");
+        int idProducto = scanner.nextInt();
+        scanner.nextLine();
         System.out.println("Ingrese la cantidad de mercadería a ingresar:");
         int cantidad = scanner.nextInt();
         scanner.nextLine();
         try {
-            productoModelo.ingresarMercaderia(nombreProducto, cantidad);
+            productoModelo.ingresarMercaderia(idProducto, cantidad);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {

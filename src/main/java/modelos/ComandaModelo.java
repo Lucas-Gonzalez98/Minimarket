@@ -24,23 +24,5 @@ public class ComandaModelo {
     public void insertarDatosComanda(Comanda comanda) throws Exception{
         comandaDao.insertarDatosComandas(comanda);
     }
-    public void ingresarComanda(Comanda comanda) throws Exception {
-        comandaDao.ingresarComanda(comanda);
-    }
 
-    public void modificarComandaTotal(Comanda comanda) throws Exception {
-        comandaDao.modificarComandaTotal(comanda);
-    }
-
-    public void eliminarComanda(Comanda comanda) throws Exception {
-        comandaDao.eliminarComanda(comanda);
-    }
-
-    public Comanda buscarComandaPorId(int id) throws Exception {
-        return comandaDao.buscarComandaPorId(id);
-    }
-
-    public ArrayList<Comanda> buscarComandas() throws Exception {
-        return comandaDao.buscarComandas();
-    }
 }

@@ -26,7 +26,7 @@ public class ProveedorDao extends DAO {
     }
     public void insertarProveedores(Proveedor proveedor) throws Exception {
         try {
-        String ingresarDatosProveedores = "INSERT INTO Proveedor (nombre, direccion, fecha, deuda) VALUES (?, ?, ?, ?)";
+        String ingresarDatosProveedores = "INSERT INTO Proveedor (nombre, direccion, fechaDePago, deuda) VALUES (?, ?, ?, ?)";
         Connection connection = conectarBase();
         PreparedStatement preparedStatement = connection.prepareStatement(ingresarDatosProveedores);
         Random random = new Random();
