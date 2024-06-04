@@ -29,5 +29,9 @@ public class VentaModelo {
         ventaDao.ingresarVenta(idProducto, apellidoCliente, nombreCliente, nombreEmpleado, cantidad, fecha);
     }
 
+    public void buscarVentaDiaria(Date fecha) throws Exception{
+        ventaDao.buscarVentaDiaria(fecha);
+    }
+
 
 }

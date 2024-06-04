@@ -8,7 +8,7 @@ public class ProductoModelo {
     private static ProductoModelo instance;
     private ProductoDao productoDao;
 
-    private ProductoModelo() {
+    public ProductoModelo() {
         this.productoDao = ProductoDao.getInstance();
     }
 
@@ -27,6 +27,10 @@ public class ProductoModelo {
     }
     public void listarProductos(){
         productoDao.listarProductos();
+    }
+
+    public Producto buscarProductoPorId(int idProducto) {
+        return productoDao.buscarProductoPorId(idProducto);
     }
 
 }

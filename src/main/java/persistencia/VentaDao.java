@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class VentaDao extends DAO{
     private static VentaDao instance;
     private VentaModelo ventaModelo;
-    private ProductoModelo productoModelo;
+    private final ProductoModelo productoModelo = new ProductoModelo();
     private ClienteModelo clienteModelo;
     private EmpleadoModelo empleadoModelo;
 
@@ -33,6 +33,7 @@ public class VentaDao extends DAO{
     public void setVentaModelo(VentaModelo ventaModelo) {
         this.ventaModelo = ventaModelo;
     }
+
 
     public void insertarDatosVentas(Venta venta) throws Exception {
         try{
@@ -202,6 +203,31 @@ public class VentaDao extends DAO{
             return rs.getInt(1);
         }
         throw new SQLException("Error al insertar cliente");
+    }
+
+    public void buscarVentaDiaria(Date fecha) throws SQLException {
+        String sql = "SELECT * FROM Venta WHERE fecha = '"+fecha+"'";
+
+        try{
+            conexion = conectarBase();
+            sentencia = conexion.createStatement();
+            resultado = sentencia.executeQuery(sql);
+
+            if(!resultado.next()){
+                System.out.println("No hubo ventas en la fecha seleccionada.");
+            } else {
+                while(resultado.next()){
+                    int productoId = resultado.getInt(2);
+                    int cantidad = resultado.getInt(5);
+                    Producto producto = productoModelo.buscarProductoPorId(productoId);
+                    System.out.println("[" +producto.getNombre() + "] - Cantidad vendida:" +cantidad);
+                }
+            }
+
+        }catch (Exception e){
+            System.out.println("Error al buscar venta." + e.getMessage());
+        }
+
     }
 
 }

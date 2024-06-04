@@ -64,7 +64,7 @@ public class ProductoDao extends DAO{
                 System.out.println("No se encontró el ID: " + id);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
         }
     }
     public void listarProductos() {
@@ -81,6 +81,30 @@ public class ProductoDao extends DAO{
             }
         } catch (Exception e) {
             System.out.println("Error al listar los productos: " + e.getMessage());
+        }
+    }
+
+    public Producto buscarProductoPorId(int idProducto) {
+        String sql = "SELECT * FROM Producto WHERE id='"+idProducto+"'";
+
+        try{
+            conexion = conectarBase();
+            sentencia = conexion.createStatement();
+            resultado = sentencia.executeQuery(sql);
+            Producto producto = null;
+
+            while (resultado.next()){
+                producto = new Producto();
+                producto.setId(resultado.getInt(1));
+                producto.setNombre(resultado.getString(2));
+                producto.setPrecio(resultado.getDouble(3));
+                producto.setStock(resultado.getInt(4));
+            }
+            return producto;
+
+        } catch (Exception e){
+            System.out.println("Error al buscar producto por Id. " + e.getMessage());
+            return null;
         }
     }
 }

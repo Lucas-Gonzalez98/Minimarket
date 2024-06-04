@@ -224,7 +224,7 @@ public class Metodos extends DAO {
             throw new RuntimeException(e);
         }
     }
-    public void consultaVentas(Scanner scanner) {
+    public void consultaVentas(Scanner scanner) throws Exception {
         int segundaOpcion;
         do {
             System.out.println("Consulta de Ventas");
@@ -255,9 +255,14 @@ public class Metodos extends DAO {
         System.out.println("Ha seleccionado consulta de ventas mensual.");
         //codigo
     }
-    public void consultaVentasDiaria() {
+    public void consultaVentasDiaria() throws Exception {
         System.out.println("Ha seleccionado consulta de ventas diaria.");
-        //codigo
+
+        System.out.println("Ingrese la fecha de consulta (yyyy-mm-dd):");
+        String fechaStr = scanner.nextLine();
+        Date fecha = Date.valueOf(fechaStr);
+
+        ventaModelo.buscarVentaDiaria(fecha);
     }
     public void balance() { //TOPO
         System.out.println("Ha seleccionado balance (mostrar ganancias y pérdidas).");
