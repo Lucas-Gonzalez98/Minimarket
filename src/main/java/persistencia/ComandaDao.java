@@ -33,7 +33,7 @@ public class ComandaDao extends DAO {
 
     public void insertarDatosComandas(Comanda comanda) throws Exception {
         try {
-            String ingresarDatosComandas = "INSERT INTO Comanda (cliente_id, empleado_id, nombre, fecha, cantidad, total) VALUES (?, ?, ?, ?, ?, ?)";
+            String ingresarDatosComandas = "INSERT INTO Comanda (cliente_id, empleado_id, nombre, fecha, cantidad, precioComanda) VALUES (?, ?, ?, ?, ?, ?)";
             Connection connection = conectarBase();
             PreparedStatement preparedStatement = connection.prepareStatement(ingresarDatosComandas);
             Random random = new Random();
@@ -61,6 +61,32 @@ public class ComandaDao extends DAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void platoMasPedido(){
+        String platoMasPedido = "";
+        int cantidad = 0;
+
+        try {
+            String query = "SELECT nombre, cantidad FROM Comanda WHERE cantidad = (SELECT MAX(cantidad) FROM Comanda)";
+            Connection connection = conectarBase();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            if (resultSet.next()) {
+                platoMasPedido = resultSet.getString("nombre");
+                cantidad = resultSet.getInt("cantidad");
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("El plato más pedido es: " + platoMasPedido + " (" + cantidad + " pedidos)");
+        //return "hola";
+        //return platoMasPedido + " (" + maxConteo + " pedidos)";
     }
 }
 

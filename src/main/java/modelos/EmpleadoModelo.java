@@ -36,4 +36,7 @@ public class EmpleadoModelo {
         empleadoDao.modificarEmpleadoSalario(empleado);
     }
 
+    public void listarEmpleados(){
+        empleadoDao.listarEmpleados();
+    }
 }

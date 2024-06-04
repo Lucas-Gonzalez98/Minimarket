@@ -9,16 +9,16 @@ public class Comanda {
     private String nombreComanda;
     private Date fecha;
     private int cantidad;
-    private double total;
+    private double precioComanda;
 
-    public Comanda(int id, ArrayList<Cliente> clientes, ArrayList<Empleado> empleados,String nombreComanda, Date fecha, int cantidad, double total) {
+    public Comanda(int id, ArrayList<Cliente> clientes, ArrayList<Empleado> empleados,String nombreComanda, Date fecha, int cantidad, double precioComanda) {
         this.id = id;
         this.clientes = clientes;
         this.nombreComanda = nombreComanda;
         this.empleados = empleados;
         this.fecha = fecha;
         this.cantidad = cantidad;
-        this.total = total;
+        this.precioComanda = precioComanda;
     }
     public Comanda() {
     }
@@ -31,12 +31,12 @@ public class Comanda {
         this.nombreComanda = nombreComanda;
     }
 
-    public double getTotal() {
-        return total;
+    public double getPrecioComanda() {
+        return precioComanda;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
+    public void setPrecioComanda(double precioComanda) {
+        this.precioComanda = precioComanda;
     }
 
     public int getId() {
@@ -85,14 +85,6 @@ public class Comanda {
         this.cantidad = cantidad;
     }
 
-    public double gettotal() {
-        return total;
-    }
-
-    public void settotal(double total) {
-        this.total = total;
-    }
-
     @Override
     public String toString() {
         return "Comanda{" +
@@ -100,7 +92,7 @@ public class Comanda {
                 ", cliente=" + clientes +
                 ", empleado=" + empleados +
                 ", fecha=" + fecha +
-                ", total=" + total +
+                ", precio Comanda=" + precioComanda +
                 '}';
     }
 }

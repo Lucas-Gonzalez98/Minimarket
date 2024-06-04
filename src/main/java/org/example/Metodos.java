@@ -66,7 +66,7 @@ public class Metodos extends DAO {
                     + "nombre VARCHAR(100) NOT NULL, "
                     + "fecha DATE NOT NULL, "
                     + "cantidad INT NOT NULL, "
-                    + "total DECIMAL(10, 2) NOT NULL, "
+                    + "precioComanda DECIMAL(10, 2) NOT NULL, "
                     + "FOREIGN KEY (cliente_id) REFERENCES Cliente(id), "
                     + "FOREIGN KEY (empleado_id) REFERENCES Empleado(id))";
             String crearTablaProveedor = "CREATE TABLE IF NOT EXISTS Proveedor ("
@@ -170,6 +170,8 @@ public class Metodos extends DAO {
             System.out.println("Ingrese el ID del producto:");
             int idProducto = scanner.nextInt();
             scanner.nextLine();
+            System.out.println("Lista de empleados del local:");
+            empleadoModelo.listarEmpleados();
             System.out.println("Ingrese el nombre del empleado:");
             String nombreEmpleado = scanner.nextLine();
             System.out.println("Ingrese la cantidad:");
@@ -278,6 +280,6 @@ public class Metodos extends DAO {
     }
     public void informacionEstadistica() {
         System.out.println("Ha seleccionado información estadística de platos más pedidos.");
-        //codigo
+        comandaModelo.platoMasPedido();
     }
 }

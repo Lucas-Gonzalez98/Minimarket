@@ -105,4 +105,22 @@ public class EmpleadoDao extends DAO{
         }
         return empleados;
     }
+
+    public void listarEmpleados(){
+        String listaEmpleados = "SELECT id, nombre, apellido FROM Empleado";
+
+        try (Connection coneccion = conectarBase();
+             PreparedStatement preparedStatement = coneccion.prepareStatement(listaEmpleados);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nombre = resultSet.getString("nombre");
+                String apellido = resultSet.getString("apellido");
+                System.out.println("[" + id + "] - " + nombre + " " + apellido);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al listar los empleados: " + e.getMessage());
+        }
+    }
 }

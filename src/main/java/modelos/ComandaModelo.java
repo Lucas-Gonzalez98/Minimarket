@@ -25,4 +25,7 @@ public class ComandaModelo {
         comandaDao.insertarDatosComandas(comanda);
     }
 
+    public void platoMasPedido(){
+        comandaDao.platoMasPedido();
+    }
 }
