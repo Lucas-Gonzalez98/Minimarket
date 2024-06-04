@@ -27,31 +27,7 @@ public class ProveedorModelo {
     public void pagarProveedor(String nombreProveedor, double cantidadPago) throws Exception{
         proveedorDao.pagarProveedor(nombreProveedor, cantidadPago);
     }
-    public void ingresarProveedor(Proveedor proveedor) throws Exception {
-        proveedorDao.ingresarProveedor(proveedor);
-    }
-
-    public void modificarProveedor(Proveedor proveedor) throws Exception {
-        proveedorDao.modificarProveedor(proveedor);
-    }
-
-    public void eliminarProveedorId(Proveedor proveedor) throws Exception {
-        proveedorDao.eliminarProveedorId(proveedor);
-    }
-
-    public void eliminarProveedorNombre(Proveedor proveedor) throws Exception {
-        proveedorDao.eliminarProveedorNombre(proveedor);
-    }
-
-    public Proveedor buscarProveedorPorId(int id) throws Exception {
-        return proveedorDao.buscarProveedorPorId(id);
-    }
-
-    public Proveedor buscarProveedorPorNombre(String nombre) throws Exception {
-        return proveedorDao.buscarProveedorPorNombre(nombre);
-    }
-
-    public ArrayList<Proveedor> buscarProveedores() throws Exception {
-        return proveedorDao.buscarProveedores();
+    public void listarProveedores(){
+        proveedorDao.listarProveedores();
     }
 }

@@ -84,66 +84,22 @@ public class ProveedorDao extends DAO {
             System.out.println(e.getMessage());
         }
     }
-    public void ingresarProveedor(Proveedor proveedor) throws Exception {
-        String sql = "INSERT INTO Proveedor(nombre,direccion) VALUES('" + proveedor.getNombre() + "', '" + proveedor.getDireccion() + "', '" + proveedor.getDeuda() + "')";
-        insertarModificarEliminar(sql);
-    }
 
-    public void modificarProveedor(Proveedor proveedor) throws Exception {
-        String sql = "UPDATE Proveedor SET nombre = '" + proveedor.getNombre() + "' WHERE id = '" + proveedor.getId() + "'";
-        insertarModificarEliminar(sql);
-    }
+    public void listarProveedores() {
+        String sql = "SELECT id, nombre, deuda FROM Proveedor";
 
-    public void eliminarProveedorNombre(Proveedor proveedor) throws Exception {
-        String sql = "DELETE FROM Proveedor WHERE nombre ='" + proveedor.getNombre() + "' ";
-        insertarModificarEliminar(sql);
-    }
+        try (Connection connection = conectarBase();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
-    public void eliminarProveedorId(Proveedor proveedor) throws Exception {
-        String sql = "DELETE FROM Proveedor WHERE id ='" + proveedor.getId() + "' ";
-        insertarModificarEliminar(sql);
-    }
-
-    public Proveedor buscarProveedorPorId(int id) throws Exception {
-        String sql = "SELECT * FROM Proveedor WHERE id = '" + id + "'";
-        consultarBase(sql);
-        while (resultado.next()) {
-            Proveedor proveedor = new Proveedor();
-            proveedor.setId(id);
-            proveedor.setNombre(resultado.getString(2));
-            proveedor.setDireccion(resultado.getString(3));
-            return proveedor;
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nombre = resultSet.getString("nombre");
+                double deuda = resultSet.getDouble("deuda");
+                System.out.println("[" + id + "] -   " + nombre + "       $" + deuda);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al listar los productos: " + e.getMessage());
         }
-        return null;
-    }
-
-    public Proveedor buscarProveedorPorNombre(String nombre) throws Exception {
-        String sql = "SELECT * FROM Proveedor WHERE nombre = '" + nombre + "'";
-        consultarBase(sql);
-        while (resultado.next()) {
-            Proveedor proveedor = new Proveedor();
-            proveedor.setId(resultado.getInt(1));
-            proveedor.setNombre(resultado.getString(2));
-            proveedor.setDireccion(resultado.getString(3));
-            return proveedor;
-        }
-        return null;
-    }
-
-    public ArrayList<Proveedor> buscarProveedores() throws Exception {
-        String sql = "SELECT * FROM Proveedor";
-        consultarBase(sql);
-        ArrayList<Proveedor> proveedores = new ArrayList();
-        while (resultado.next()) {
-            Proveedor proveedor = new Proveedor();
-            proveedor.setId(resultado.getInt(1));
-            proveedor.setNombre(resultado.getString(2));
-            proveedor.setDireccion(resultado.getString(3));
-            proveedores.add(proveedor);
-        }
-        if (proveedores.size() == 0) {
-            return null;
-        }
-        return proveedores;
     }
 }

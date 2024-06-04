@@ -49,7 +49,7 @@ public class ClienteDao extends DAO{
             System.out.println(e.getMessage());
         }
 
-        }
+    }
     public void ingresarCliente(Cliente cliente) throws Exception {
         String sql = "INSERT INTO Cliente(nombre,apellido,direccion) VALUES('" + cliente.getNombre() + "', '" + cliente.getApellido() + "', '" + cliente.getDireccion() + "')";
         insertarModificarEliminar(sql);

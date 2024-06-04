@@ -1,25 +1,27 @@
 package entidades;
 
-import java.time.LocalDate;
+import java.sql.Date;
+import java.util.ArrayList;
+
 
 public class Venta {
     private int id;
-    private Producto producto;
-    private Cliente cliente;
-    private Empleado empleado;
+    private ArrayList<Producto> productos = new ArrayList<Producto>();
+    private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+    private ArrayList<Empleado> empleados = new ArrayList<Empleado>();
     private int cantidad;
-    private LocalDate fecha;
+    private Date fecha;
     private double total;
 
-    public Venta(Producto producto, Cliente cliente, Empleado empleado, int cantidad, LocalDate fecha, double total) {
-        this.producto = producto;
-        this.cliente = cliente;
-        this.empleado = empleado;
+    public Venta(int id, ArrayList<Producto> productos, ArrayList<Cliente> clientes, ArrayList<Empleado> empleados, int cantidad, Date fecha, double total) {
+        this.id = id;
+        this.productos = productos;
+        this.clientes = clientes;
+        this.empleados = empleados;
         this.cantidad = cantidad;
         this.fecha = fecha;
         this.total = total;
     }
-
     public Venta() {
     }
 
@@ -31,28 +33,37 @@ public class Venta {
         this.id = id;
     }
 
-    public Producto getProducto() {
-        return producto;
+    public ArrayList<Producto> getProductos() {
+        return productos;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
+    public void setProductos(ArrayList<Producto> productos) {
+        this.productos = productos;
+    }
+    public void addProductos(Producto producto){
+        this.productos.add(producto);
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public ArrayList<Cliente> getClientes() {
+        return clientes;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setClientes(ArrayList<Cliente> clientes) {
+        this.clientes = clientes;
+    }
+    public void addClientes(Cliente cliente){
+        this.clientes.add(cliente);
     }
 
-    public Empleado getEmpleado() {
-        return empleado;
+    public ArrayList<Empleado> getEmpleados() {
+        return empleados;
     }
 
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
+    public void setEmpleados(ArrayList<Empleado> empleados) {
+        this.empleados = empleados;
+    }
+    public void addEmpleados(Empleado empleado){
+        this.empleados.add(empleado);
     }
 
     public int getCantidad() {
@@ -63,19 +74,19 @@ public class Venta {
         this.cantidad = cantidad;
     }
 
-    public LocalDate getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
-    public double getTotal() {
+    public double gettotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void settotal(double total) {
         this.total = total;
     }
 
@@ -83,12 +94,13 @@ public class Venta {
     public String toString() {
         return "Venta{" +
                 "id=" + id +
-                ", producto=" + producto +
-                ", cliente=" + cliente +
-                ", empleado=" + empleado +
+                ", productos=" + productos +
+                ", clientes=" + clientes +
+                ", empleados=" + empleados +
                 ", cantidad=" + cantidad +
                 ", fecha=" + fecha +
                 ", total=" + total +
                 '}';
     }
 }
+

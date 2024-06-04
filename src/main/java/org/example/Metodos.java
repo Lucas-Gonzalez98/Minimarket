@@ -16,7 +16,6 @@ public class Metodos extends DAO {
     private ProductoModelo productoModelo;
     private ProveedorModelo proveedorModelo;
     private ComandaModelo comandaModelo;
-    private DetalleComandaModelo detalleComandaModelo;
     private VentaModelo ventaModelo;
 
     private ArrayList<Double> pagos = new ArrayList<>();
@@ -29,7 +28,6 @@ public class Metodos extends DAO {
         productoModelo = ProductoModelo.getInstance();
         proveedorModelo = ProveedorModelo.getInstance();
         comandaModelo = ComandaModelo.getInstance();
-        detalleComandaModelo = DetalleComandaModelo.getInstance();
         ventaModelo = VentaModelo.getInstance();
     }
 
@@ -63,31 +61,25 @@ public class Metodos extends DAO {
                     + "salario DECIMAL(10, 2) NOT NULL)";
             String crearTablaComanda = "CREATE TABLE IF NOT EXISTS Comanda ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "cliente_id INT DEFAULT NULL, "
-                    + "empleado_id INT NOT NULL, "
+                    + "cliente_id INT, "
+                    + "empleado_id INT, "
+                    + "nombre VARCHAR(100) NOT NULL, "
                     + "fecha DATE NOT NULL, "
+                    + "cantidad INT NOT NULL, "
                     + "total DECIMAL(10, 2) NOT NULL, "
                     + "FOREIGN KEY (cliente_id) REFERENCES Cliente(id), "
                     + "FOREIGN KEY (empleado_id) REFERENCES Empleado(id))";
-            String crearTablaDetalleComanda = "CREATE TABLE IF NOT EXISTS DetalleComanda ("
-                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "comanda_id INT NOT NULL, "
-                    + "producto_id INT NOT NULL, "
-                    + "cantidad INT NOT NULL, "
-                    + "precio DECIMAL(10, 2) NOT NULL, "
-                    + "FOREIGN KEY (comanda_id) REFERENCES Comanda(id), "
-                    + "FOREIGN KEY (producto_id) REFERENCES Producto(id))";
             String crearTablaProveedor = "CREATE TABLE IF NOT EXISTS Proveedor ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
                     + "nombre VARCHAR(100) NOT NULL, "
                     + "direccion VARCHAR(200) DEFAULT NULL, "
-                    + "fecha DATE NOT NULL, "
+                    + "fechaDePago DATE NOT NULL, "
                     + "deuda DECIMAL(10, 2) NOT NULL)";
             String crearTablaVenta = "CREATE TABLE IF NOT EXISTS Venta ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "producto_id INT NOT NULL, "
-                    + "cliente_id INT DEFAULT NULL, "
-                    + "empleado_id INT NOT NULL, "
+                    + "producto_id INT, "
+                    + "cliente_id INT, "
+                    + "empleado_id INT, "
                     + "cantidad INT NOT NULL, "
                     + "fecha DATE NOT NULL, "
                     + "total DECIMAL(10, 2) NOT NULL, "
@@ -99,7 +91,6 @@ public class Metodos extends DAO {
             insertarModificarEliminar(crearTablaCliente);
             insertarModificarEliminar(crearTablaEmpleado);
             insertarModificarEliminar(crearTablaComanda);
-            insertarModificarEliminar(crearTablaDetalleComanda);
             insertarModificarEliminar(crearTablaProveedor);
             insertarModificarEliminar(crearTablaVenta);
             System.out.println("Tablas creadas o ya existentes.");
@@ -114,7 +105,6 @@ public class Metodos extends DAO {
         insertarDatosEmpleado();
         insertarDatosProducto();
         insertarDatosComanda();
-        insertarDatosDetalleComanda();
         insertarDatosProveedor();
         insertarDatosVenta();
         System.out.println("Datos generados Exitosamente");
@@ -163,16 +153,6 @@ public class Metodos extends DAO {
             System.out.println(e.getMessage());
         }
     }
-
-    public void insertarDatosDetalleComanda() {
-        try {
-            DetalleComanda detalleComanda = new DetalleComanda();
-            detalleComandaModelo.insertarDatosDetallesComanda(detalleComanda);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public void insertarDatosVenta() {
         try {
             Venta venta = new Venta();
@@ -182,27 +162,36 @@ public class Metodos extends DAO {
         }
     }
 
-    public void venderCobrarProducto() throws Exception {
-        System.out.println("Ingrese el nombre del producto:");
-        String nombreProducto = scanner.nextLine();
-        System.out.println("Ingrese el nombre del cliente:");
-        String nombreCliente = scanner.nextLine();
-        System.out.println("Ingrese el nombre del empleado:");
-        String nombreEmpleado = scanner.nextLine();
-        System.out.println("Ingrese la cantidad:");
-        int cantidad = scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Ingrese la fecha (yyyy-mm-dd):");
-        String fechaStr = scanner.nextLine();
-        Date fecha = Date.valueOf(fechaStr);
-        try {
-            ventaModelo.ingresarVenta(nombreProducto, nombreCliente, nombreEmpleado, cantidad, fecha);
-        } catch (Exception e){
+    public void venderCobrarProducto(){
+        try{
+            System.out.println("Lista de productos:");
+            productoModelo.listarProductos();
+            System.out.println();
+            System.out.println("Ingrese el ID del producto:");
+            int idProducto = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("Ingrese el nombre del empleado:");
+            String nombreEmpleado = scanner.nextLine();
+            System.out.println("Ingrese la cantidad:");
+            int cantidad = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("Ingrese la fecha (yyyy-mm-dd):");
+            String fechaStr = scanner.nextLine();
+            Date fecha = Date.valueOf(fechaStr);
+            System.out.println("Ingrese el nombre del cliente:");
+            String nombreCliente = scanner.nextLine();
+            System.out.println("Ingrese el apellido del cliente:");
+            String apellidoCliente = scanner.nextLine();
+            ventaModelo.ingresarVenta(idProducto, apellidoCliente, nombreCliente, nombreEmpleado, cantidad, fecha);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
     public void pagoProveedor() {
         System.out.println("Ha seleccionado pago a proveedor.");
+        System.out.println("Lista de productos:");
+        proveedorModelo.listarProveedores();
+        System.out.println();
         System.out.println("Ingrese el nombre del proveedor:");
         String nombreProveedor = scanner.nextLine();
         System.out.println("Ingrese la cantidad a pagar:");
@@ -218,6 +207,9 @@ public class Metodos extends DAO {
         }
     }
     public void ingresoMercaderia() {
+        System.out.println("Lista de productos:");
+        productoModelo.listarProductos();
+        System.out.println();
         System.out.println("Ingrese el nombre del producto:");
         String nombreProducto = scanner.nextLine();
         System.out.println("Ingrese la cantidad de mercadería a ingresar:");
@@ -266,7 +258,7 @@ public class Metodos extends DAO {
         System.out.println("Ha seleccionado consulta de ventas diaria.");
         //codigo
     }
-    public void balance() {
+    public void balance() { //TOPO
         System.out.println("Ha seleccionado balance (mostrar ganancias y pérdidas).");
         //codigo
     }

@@ -25,32 +25,8 @@ public class ProductoModelo {
     public void ingresarMercaderia(String nombreProducto, int cantidad) throws Exception {
         productoDao.ingresarMercaderia(nombreProducto, cantidad);
     }
-
-    public void modificarProductoPrecio(Producto producto) throws Exception {
-        productoDao.modificarProductoPrecio(producto);
+    public void listarProductos(){
+        productoDao.listarProductos();
     }
 
-    public void modificarProductoStock(Producto producto) throws Exception {
-        productoDao.modificarProductoStock(producto);
-    }
-
-    public void eliminarProductoId(Producto producto) throws Exception {
-        productoDao.eliminarProductoId(producto);
-    }
-
-    public void eliminarProductoNombre(Producto producto) throws Exception {
-        productoDao.eliminarProductoNombre(producto);
-    }
-
-    public Producto buscarProductoPorId(int id) throws Exception {
-        return productoDao.buscarProductoPorId(id);
-    }
-
-    public Producto buscarProductoPorNombre(String nombre) throws Exception {
-        return productoDao.buscarProductoPorNombre(nombre);
-    }
-
-    public ArrayList<Producto> buscarProductos() throws Exception {
-        return productoDao.buscarProductos();
-    }
 }

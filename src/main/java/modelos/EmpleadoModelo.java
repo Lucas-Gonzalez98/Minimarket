@@ -36,15 +36,4 @@ public class EmpleadoModelo {
         empleadoDao.modificarEmpleadoSalario(empleado);
     }
 
-    public void eliminarEmpleadoId(Empleado empleado) throws Exception {
-        empleadoDao.eliminarEmpleadoId(empleado);
-    }
-
-    public Empleado buscarEmpleadoPorId(int id) throws Exception {
-        return empleadoDao.buscarEmpleadoPorId(id);
-    }
-
-    public ArrayList<Empleado> buscarEmpleados() throws Exception {
-        return empleadoDao.buscarEmpleados();
-    }
 }

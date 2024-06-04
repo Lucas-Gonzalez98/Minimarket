@@ -33,7 +33,7 @@ public class ProductoDao extends DAO{
         Connection connection = conectarBase();
         PreparedStatement preparedStatement = connection.prepareStatement(ingresarDatosProductos);
         Random random = new Random();
-        String[] NOMBRES = {"Leche", "Pan", "Queso", "Manteca", "Yogurt", "Cereal", "Jugo de Naranja", "Café", "Azúcar", "Arroz", "Pasta", "Aceite", "Pollo", "Carne", "Pescado", "Huevos", "Pizza", "Hamburguesa", "Sushi", "Tacos"};
+        String[] NOMBRES = {"Leche", "Pan", "Queso", "Manteca", "Yogurt", "Cereal", "Jugo de Naranja", "Café", "Azúcar", "Arroz", "Pasta", "Aceite", "Pollo", "Carne", "Pescado", "Huevos", "Chocolate", "Galletas dulces", "Caramelos", "Chicles"};
             for (int i = 0; i < 20; i++) {
                 String nombre = NOMBRES[i];
                 double precio = i < 16 ? 2000 + random.nextDouble() * 2000 : 4000 + random.nextDouble() * 4000;
@@ -67,70 +67,20 @@ public class ProductoDao extends DAO{
             System.out.println(e.getMessage());;
         }
     }
+    public void listarProductos() {
+        String sql = "SELECT id, nombre FROM Producto";
 
-    public void modificarProductoPrecio(Producto producto) throws Exception {
-        String sql = "UPDATE Producto SET precio = '" + producto.getPrecio() + "' WHERE id = '" + producto.getId() + "'";
-        insertarModificarEliminar(sql);
-    }
+        try (Connection connection = conectarBase();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
-    public void modificarProductoStock(Producto producto) throws Exception {
-        String sql = "UPDATE Producto SET stock = '" + producto.getStock() + "' WHERE id = '" + producto.getId() + "'";
-        insertarModificarEliminar(sql);
-    }
-
-    public void eliminarProductoNombre(Producto producto) throws Exception {
-        String sql = "DELETE FROM Producto WHERE nombre ='" + producto.getNombre() + "' ";
-        insertarModificarEliminar(sql);
-    }
-
-    public void eliminarProductoId(Producto producto) throws Exception {
-        String sql = "DELETE FROM Producto WHERE id ='" + producto.getId() + "' ";
-        insertarModificarEliminar(sql);
-    }
-
-    public Producto buscarProductoPorId(int id) throws Exception {
-        String sql = "SELECT * FROM Producto WHERE id = '" + id + "'";
-        consultarBase(sql);
-        while (resultado.next()) {
-            Producto producto = new Producto();
-            producto.setId(id);
-            producto.setNombre(resultado.getString(2));
-            producto.setPrecio(resultado.getInt(3));
-            producto.setStock(resultado.getInt(4));
-            return producto;
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nombre = resultSet.getString("nombre");
+                System.out.println("[" + id + "] - " + nombre);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al listar los productos: " + e.getMessage());
         }
-        return null;
-    }
-
-    public Producto buscarProductoPorNombre(String nombre) throws Exception {
-        String sql = "SELECT * FROM Producto WHERE nombre = '" + nombre + "'";
-        consultarBase(sql);
-        while (resultado.next()) {
-            Producto producto = new Producto();
-            producto.setId(resultado.getInt(1));
-            producto.setNombre(resultado.getString(2));
-            producto.setPrecio(resultado.getInt(3));
-            producto.setStock(resultado.getInt(4));
-            return producto;
-        }
-        return null;
-    }
-
-    public ArrayList<Producto> buscarProductos() throws Exception {
-        String sql = "SELECT * FROM Producto";
-        consultarBase(sql);
-        ArrayList<Producto> productos = new ArrayList();
-        while (resultado.next()) {
-            Producto producto = new Producto();
-            producto.setId(resultado.getInt(1));
-            producto.setNombre(resultado.getString(2));
-            producto.setPrecio(resultado.getInt(3));
-            producto.setStock(resultado.getInt(4));
-            productos.add(producto);
-        }
-        if (productos.size() == 0) {
-            return null;
-        }
-        return productos;
     }
 }

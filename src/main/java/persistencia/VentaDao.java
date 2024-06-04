@@ -12,6 +12,7 @@ import modelos.VentaModelo;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class VentaDao extends DAO{
     private static VentaDao instance;
@@ -43,13 +44,13 @@ public class VentaDao extends DAO{
 
             for (int i = 0; i < 50; i++) {
                 String nombreProducto = nombresProductos.get(random.nextInt(nombresProductos.size()));
-                int productoId = random.nextInt(20) + 1; // Asumiendo que hay 20 productos
-                int clienteId = random.nextInt(10) + 1; // Asumiendo que hay 10 clientes
-                int empleadoId = random.nextInt(4) + 1; // Asumiendo que hay 4 empleados
-                int cantidadVenta = random.nextInt(5) + 1; // Cantidad entre 1 y 5
-                Date fechaVenta = Date.valueOf("2024-05-" + (random.nextInt(31) + 1)); // Entre 1 y 31 de mayo de 2024
+                int productoId =  obtenerIdProductoPorNombre(nombreProducto, connection);
+                int clienteId = random.nextInt(15) + 1;
+                int empleadoId = random.nextInt(4) + 1;
+                int cantidadVenta = random.nextInt(5) + 1;
+                Date fechaVenta = Date.valueOf("2024-05-" + (random.nextInt(31) + 1));
 
-                double precioProducto = obtenerPrecioProductoPorNombre(nombreProducto, connection);
+                double precioProducto = obtenerPrecioProductoPorId(productoId, connection);
                 double totalVenta = precioProducto * cantidadVenta;
 
                 preparedStatement.setInt(1, productoId);
@@ -67,11 +68,21 @@ public class VentaDao extends DAO{
             System.out.println(e.getMessage());
         }
     }
-
-    private double obtenerPrecioProductoPorNombre(String nombreProducto, Connection connection) throws SQLException {
-        String sql = "SELECT precio FROM Producto WHERE nombre = ?";
+    private int obtenerIdProductoPorNombre(String nombreProducto, Connection connection) throws SQLException {
+        String sql = "SELECT id FROM Producto WHERE nombre = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, nombreProducto);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+        }
+        throw new SQLException("Producto no encontrado");
+    }
+    private double obtenerPrecioProductoPorId(int productoId, Connection connection) throws SQLException {
+        String sql = "SELECT precio FROM Producto WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, productoId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getDouble("precio");
@@ -79,7 +90,6 @@ public class VentaDao extends DAO{
         }
         throw new SQLException("Producto no encontrado");
     }
-
     private ArrayList<String> obtenerNombresProductos(Connection connection) throws SQLException {
         String sql = "SELECT nombre FROM Producto";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -92,60 +102,73 @@ public class VentaDao extends DAO{
         }
     }
 
-    public void venderProducto(String nombreProducto, String nombreCliente, String nombreEmpleado, int cantidad, Date fecha) throws Exception {
-        String buscarProducto = "SELECT id, precio, stock FROM Producto WHERE nombre = ?";
-        String buscarCliente = "SELECT id FROM Cliente WHERE nombre = ?";
-        String buscarEmpleado = "SELECT id, apellido, cargo FROM Empleado WHERE nombre = ? AND (cargo = 'Vendedor' OR cargo = 'Mesero')";
+    public void ingresarVenta(int idProducto, String apellidoCliente, String nombreCliente, String nombreEmpleado, int cantidad, Date fecha) throws Exception {
+        String buscarProducto = "SELECT id, stock FROM Producto WHERE id = ?";
+        String buscarCliente = "SELECT id FROM Cliente WHERE nombre = ? AND apellido = ?";
+        String buscarEmpleado = "SELECT id FROM Empleado WHERE nombre = ?";
         String actualizarStockProducto = "UPDATE Producto SET stock = stock - ? WHERE id = ?";
-        String insertarVenta = "INSERT INTO Venta (producto_id, cliente_id, empleado_id, cantidad, fecha, total) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertarCliente = "INSERT INTO Cliente (nombre, apellido, direccion) VALUES (?, ?, ?)";
+        String insertarVenta = "INSERT INTO Venta (producto_id, cliente_id, empleado_id, cantidad, fecha, precio) VALUES (?, ?, ?, ?, ?, ?)";
+        Scanner scanner = new Scanner(System.in);
+        try (Connection connection = conectarBase();
+             PreparedStatement preparedStatementBuscarProducto = connection.prepareStatement(buscarProducto);
+             PreparedStatement preparedStatementBuscarCliente = connection.prepareStatement(buscarCliente);
+             PreparedStatement preparedStatementBuscarEmpleado = connection.prepareStatement(buscarEmpleado);
+             PreparedStatement preparedStatementActualizarStock = connection.prepareStatement(actualizarStockProducto);
+             PreparedStatement preparedStatementInsertarCliente = connection.prepareStatement(insertarCliente, PreparedStatement.RETURN_GENERATED_KEYS);
+             PreparedStatement preparedStatementInsertarVenta = connection.prepareStatement(insertarVenta)) {
 
-        try (Connection coneccion = conectarBase();
-             PreparedStatement preparedStatementBuscarProducto = coneccion.prepareStatement(buscarProducto);
-             PreparedStatement preparedStatementBuscarCliente = coneccion.prepareStatement(buscarCliente);
-             PreparedStatement preparedStatementBuscarEmpleado = coneccion.prepareStatement(buscarEmpleado);
-             PreparedStatement preparedStatementActualizarStock = coneccion.prepareStatement(actualizarStockProducto);
-             PreparedStatement preparedStatementInsertarVenta = coneccion.prepareStatement(insertarVenta)) {
-
-            preparedStatementBuscarProducto.setString(1, nombreProducto);
+            // Buscar producto
+            preparedStatementBuscarProducto.setInt(1, idProducto);
             ResultSet resultSetProducto = preparedStatementBuscarProducto.executeQuery();
             if (!resultSetProducto.next()) {
-                System.out.println("No se encontró el producto con nombre: " + nombreProducto);
+                System.out.println("No se encontró el producto con ID: " + idProducto);
                 return;
             }
-            int productoId = resultSetProducto.getInt("id");
-            double precioProducto = resultSetProducto.getDouble("precio");
             int stockProducto = resultSetProducto.getInt("stock");
 
             if (cantidad > stockProducto) {
-                System.out.println("No hay suficiente stock del producto \"" + nombreProducto + "\".");
+                System.out.println("No hay suficiente stock del producto con ID: " + idProducto);
                 return;
             }
 
+            // Buscar cliente
             preparedStatementBuscarCliente.setString(1, nombreCliente);
+            preparedStatementBuscarCliente.setString(2, apellidoCliente);
             ResultSet resultSetCliente = preparedStatementBuscarCliente.executeQuery();
+            int clienteId;
             if (!resultSetCliente.next()) {
-                System.out.println("No se encontró el cliente con nombre: " + nombreCliente);
-                return;
+                // Si el cliente no existe, lo insertamos en la base de datos
+                System.out.println("El cliente no existe en la base de datos. Ingresando nuevo cliente...");
+                System.out.println("Ingrese la dirección del cliente:");
+                String direccionCliente = scanner.nextLine();
+                clienteId = insertarNuevoCliente(nombreCliente, apellidoCliente, direccionCliente, preparedStatementInsertarCliente);
+            } else {
+                clienteId = resultSetCliente.getInt("id");
             }
-            int clienteId = resultSetCliente.getInt("id");
 
+            // Buscar empleado
             preparedStatementBuscarEmpleado.setString(1, nombreEmpleado);
             ResultSet resultSetEmpleado = preparedStatementBuscarEmpleado.executeQuery();
             if (!resultSetEmpleado.next()) {
-                System.out.println("No se encontró el empleado con nombre: " + nombreEmpleado + " y con cargo Vendedor o Mesero.");
+                System.out.println("No se encontró el empleado con nombre: " + nombreEmpleado);
                 return;
             }
             int empleadoId = resultSetEmpleado.getInt("id");
             String apellidoEmpleado = resultSetEmpleado.getString("apellido");
             String cargoEmpleado = resultSetEmpleado.getString("cargo");
 
+            // Calcular el precio total de la venta
+            double precioProducto = obtenerPrecioProductoPorId(idProducto, connection);
             double totalVenta = cantidad * precioProducto;
 
+            // Actualizar stock del producto
             preparedStatementActualizarStock.setInt(1, cantidad);
-            preparedStatementActualizarStock.setInt(2, productoId);
+            preparedStatementActualizarStock.setInt(2, idProducto);
             preparedStatementActualizarStock.executeUpdate();
 
-            preparedStatementInsertarVenta.setInt(1, productoId);
+            // Insertar la venta
+            preparedStatementInsertarVenta.setInt(1, idProducto);
             preparedStatementInsertarVenta.setInt(2, clienteId);
             preparedStatementInsertarVenta.setInt(3, empleadoId);
             preparedStatementInsertarVenta.setInt(4, cantidad);
@@ -156,8 +179,8 @@ public class VentaDao extends DAO{
             System.out.println("Venta generada exitosamente:");
             System.out.println("Empleado: " + nombreEmpleado + " " + apellidoEmpleado);
             System.out.println("Cargo del empleado: " + cargoEmpleado);
-            System.out.println("Cliente: " + nombreCliente);
-            System.out.println("Producto: " + nombreProducto + " - Precio: " + precioProducto);
+            System.out.println("Cliente: " + nombreCliente + " " + apellidoCliente);
+            System.out.println("Producto ID: " + idProducto);
             System.out.println("Fecha: " + fecha);
             System.out.println("Total: " + totalVenta);
 
@@ -166,72 +189,17 @@ public class VentaDao extends DAO{
         }
     }
 
-    public void ingresarVenta(Venta venta) throws Exception {
-        String sql = "INSERT INTO Venta(cantidad,fecha,total) VALUES('" + venta.getCantidad() + "', '" + venta.getFecha() + "', '" + venta.getTotal() + "')";
-        insertarModificarEliminar(sql);
-    }
+    private int insertarNuevoCliente(String nombreCliente, String apellidoCliente, String direccionCliente, PreparedStatement preparedStatementInsertarCliente) throws SQLException {
+        preparedStatementInsertarCliente.setString(1, nombreCliente);
+        preparedStatementInsertarCliente.setString(2, apellidoCliente);
+        preparedStatementInsertarCliente.setString(3, direccionCliente);
+        preparedStatementInsertarCliente.executeUpdate();
 
-    public void modificarVentaCantidad(Venta venta) throws Exception {
-        String sql = "UPDATE Venta SET cantidad = '" + venta.getCantidad() + "' WHERE id = '" + venta.getId() + "'";
-        insertarModificarEliminar(sql);
-    }
-
-    public void eliminarVenta(Venta venta) throws Exception {
-        String sql = "DELETE FROM Venta WHERE id ='" + venta.getId() + "' ";
-        insertarModificarEliminar(sql);
-    }
-
-    public Venta buscarVentaPorId(int id) throws Exception {
-        String sql = "SELECT * FROM Venta WHERE id = '" + id + "'";
-        try{
-            consultarBase(sql);
-            Venta venta = null;
-            while (resultado.next()) {
-                venta = new Venta();
-                venta.setId(resultado.getInt(1));
-                int idProducto = resultado.getInt(2);
-                Producto producto = productoModelo.buscarProductoPorId(idProducto);
-                venta.setProducto(producto);
-                int idCliente = resultado.getInt(3);
-                Cliente cliente = clienteModelo.buscarClientePorId(idCliente);
-                venta.setCliente(cliente);
-                int idEmpleado = resultado.getInt(4);
-                Empleado empleado = empleadoModelo.buscarEmpleadoPorId(idEmpleado);
-                venta.setEmpleado(empleado);
-                venta.setCantidad(resultado.getInt(5));
-                venta.setFecha(resultado.getDate(6).toLocalDate());
-                venta.setTotal(resultado.getInt(7));
-            }
-            desconectarBase();
-            return venta;
-        } catch (Exception e) {
-            throw e;
+        ResultSet rs = preparedStatementInsertarCliente.getGeneratedKeys();
+        if (rs.next()) {
+            return rs.getInt(1);
         }
+        throw new SQLException("Error al insertar cliente");
     }
 
-    public ArrayList<Venta> buscarVentas() throws Exception {
-        String sql = "SELECT * FROM Venta";
-        consultarBase(sql);
-        ArrayList<Venta> ventas = new ArrayList();
-        try {
-            while (resultado.next()) {
-                Venta venta = new Venta();
-                venta.setId(resultado.getInt(1));
-                venta.setProducto(productoModelo.buscarProductoPorId(2));
-                venta.setCliente(clienteModelo.buscarClientePorId(3));
-                venta.setEmpleado(empleadoModelo.buscarEmpleadoPorId(4));
-                venta.setCantidad(resultado.getInt(5));
-                venta.setFecha(resultado.getDate(6).toLocalDate());
-                venta.setTotal(resultado.getInt(7));
-                ventas.add(venta);
-            }
-            desconectarBase();
-            if (ventas.isEmpty()) {
-                return null;
-            }
-            return ventas;
-        } catch (Exception e) {
-            throw e;
-        }
-    }
 }
