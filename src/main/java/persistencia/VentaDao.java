@@ -216,18 +216,47 @@ public class VentaDao extends DAO{
             if(!resultado.next()){
                 System.out.println("No hubo ventas en la fecha seleccionada.");
             } else {
+                int totalVentas = 0;
                 while(resultado.next()){
                     int productoId = resultado.getInt(2);
                     int cantidad = resultado.getInt(5);
+                    totalVentas += cantidad;
                     Producto producto = productoModelo.buscarProductoPorId(productoId);
                     System.out.println("[" +producto.getNombre() + "] - Cantidad vendida:" +cantidad);
                 }
+                System.out.println("TOTAL DE VENTAS = " + totalVentas);
             }
 
         }catch (Exception e){
             System.out.println("Error al buscar venta." + e.getMessage());
         }
 
+    }
+
+    public void buscarVentaMensual(String mes){
+        String sql = "SELECT * FROM Venta WHERE MONTH(FECHA) = '"+mes+"'";
+
+        try{
+            conexion = conectarBase();
+            sentencia = conexion.createStatement();
+            resultado = sentencia.executeQuery(sql);
+
+            if(!resultado.next()){
+                System.out.println("No hubo ventas en el mes seleccionado.");
+            } else {
+                int totalVentas = 0;
+                while(resultado.next()){
+                    int productoId = resultado.getInt(2);
+                    int cantidad = resultado.getInt(5);
+                    totalVentas += cantidad;
+                    Producto producto = productoModelo.buscarProductoPorId(productoId);
+                    System.out.println("[" +producto.getNombre() + "] - Cantidad vendida:" +cantidad);
+                }
+                System.out.println("TOTAL DE VENTAS = " + totalVentas);
+            }
+        }catch (Exception e){
+            System.out.println("Error al buscar venta mensual. " + e.getMessage());
+        }
     }
 
 }
