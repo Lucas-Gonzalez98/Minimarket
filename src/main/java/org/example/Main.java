@@ -21,6 +21,7 @@ public class Main {
         //mt.insertarDatos();
 
         do {
+            //prueba git
             System.out.println("Menú Principal");
             System.out.println("1. Vender/Cobrar un producto"); // LISTO FALTA LOGGS
             System.out.println("2. Ingreso de mercadería"); //LISTO FALTA LOGGS
