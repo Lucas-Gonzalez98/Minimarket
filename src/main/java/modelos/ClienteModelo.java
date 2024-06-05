@@ -24,4 +24,8 @@ public class ClienteModelo {
     public void insertarDatosClientes(Cliente cliente) throws Exception{
         clienteDao.insertarDatosClientes(cliente);
     }
+
+    public void listarClientes() throws Exception{
+        clienteDao.listarClientes();
+    }
 }

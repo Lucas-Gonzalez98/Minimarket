@@ -1,5 +1,6 @@
 package entidades;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.sql.Date;
 public class Comanda {
@@ -10,8 +11,35 @@ public class Comanda {
     private Date fecha;
     private int cantidad;
     private double precioComanda;
+    private int idCliente;
+    private int idEmpleado;
+    private LocalDate fechaActual;
 
-    public Comanda(int id, ArrayList<Cliente> clientes, ArrayList<Empleado> empleados,String nombreComanda, Date fecha, int cantidad, double precioComanda) {
+    public LocalDate getFechaActual() {
+        return fechaActual;
+    }
+
+    public void setFechaActual(LocalDate fechaActual) {
+        this.fechaActual = fechaActual;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public int getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
+
+    public Comanda(int id, ArrayList<Cliente> clientes, ArrayList<Empleado> empleados, String nombreComanda, Date fecha, int cantidad, double precioComanda) {
         this.id = id;
         this.clientes = clientes;
         this.nombreComanda = nombreComanda;

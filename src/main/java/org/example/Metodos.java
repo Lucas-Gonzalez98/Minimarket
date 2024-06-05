@@ -6,6 +6,7 @@ import persistencia.DAO;
 import persistencia.ProductoDao;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.Scanner;
@@ -111,7 +112,7 @@ public class Metodos extends DAO {
         insertarDatosCliente();
         insertarDatosEmpleado();
         insertarDatosProducto();
-        insertarDatosComanda();
+//        insertarDatosComanda();
         insertarDatosProveedor();
         insertarDatosVenta();
         System.out.println("Datos generados Exitosamente");
@@ -306,9 +307,64 @@ public class Metodos extends DAO {
         }
     }
 
-    public void solicitarComanda() {
-        System.out.println("Ha seleccionado solicitar una comanda a la cocina.");
-        //codigo
+    public void solicitarComanda() throws Exception {
+        Comanda comanda = new Comanda();
+
+        int opcionElegida;
+        do {
+            System.out.println("Seleccione la comanda: ");
+            System.out.println("1-Hamburguesa con papas fritas | $7500");
+            System.out.println("2-Pizza muzzarela | $7000");
+            System.out.println("3-Lomo con papas fritas | $12000");
+            System.out.println("4-Milanesa napolitana con puré | $10500");
+
+            opcionElegida = scanner.nextInt();
+
+            if(opcionElegida<1 || opcionElegida>4){
+                System.out.println("Opción inválida, intente nuevamente.");
+            }
+        } while (opcionElegida<1 || opcionElegida>4);
+
+        System.out.println("Correcto, ahora ingrese la cantidad deseada: ");
+        int cantidadElegida = scanner.nextInt();
+        comanda.setCantidad(cantidadElegida);
+
+        switch (opcionElegida){
+            case 1:
+                comanda.setPrecioComanda(7500);
+                comanda.setNombreComanda("Hamburguesa con papas fritas");
+                break;
+            case 2:
+                comanda.setPrecioComanda(7000);
+                comanda.setNombreComanda("Pizza muzzarela");
+                break;
+            case 3:
+                comanda.setPrecioComanda(12000);
+                comanda.setNombreComanda("Lomo con papas fritas");
+                break;
+            case 4:
+                comanda.setPrecioComanda(10500);
+                comanda.setNombreComanda("Milanesa napoiltana con puré");
+                break;
+        }
+
+        System.out.println("Correcto, ahora seleccione el id del empleado que atiende la comanda: ");
+        empleadoModelo.listarEmpleados();
+        int idEmpleado = scanner.nextInt();
+        comanda.setIdEmpleado(idEmpleado);
+        System.out.println();
+
+        System.out.println("Seleccione el id del cliente que solicita la comanda: ");
+        clienteModelo.listarClientes();
+        int idCliente = scanner.nextInt();
+        comanda.setIdCliente(idCliente);
+        System.out.println();
+
+        LocalDate fechaActual = LocalDate.now();
+        comanda.setFechaActual(fechaActual);
+
+        comandaModelo.solicitarComanda(comanda);
+        System.out.println("Comanda solicitada correctamente.");
     }
     public void pagarCuenta() {
         System.out.println("Ha seleccionado pagar cuenta.");

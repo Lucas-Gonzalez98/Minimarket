@@ -48,6 +48,23 @@ public class ClienteDao extends DAO{
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
+    }
 
+    public void listarClientes(){
+        String listaEmpleados = "SELECT id, nombre, apellido FROM Cliente";
+
+        try (Connection coneccion = conectarBase();
+             PreparedStatement preparedStatement = coneccion.prepareStatement(listaEmpleados);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nombre = resultSet.getString("nombre");
+                String apellido = resultSet.getString("apellido");
+                System.out.println("[" + id + "] - " + nombre + " " + apellido);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al listar los clientes: " + e.getMessage());
+        }
     }
 }

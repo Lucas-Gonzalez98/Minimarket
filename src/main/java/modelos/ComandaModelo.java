@@ -31,4 +31,8 @@ public class ComandaModelo {
     public void platoMasPedido(){
         comandaDao.platoMasPedido();
     }
+
+    public void solicitarComanda(Comanda comanda) {
+        comandaDao.ingresarComanda(comanda);
+    }
 }

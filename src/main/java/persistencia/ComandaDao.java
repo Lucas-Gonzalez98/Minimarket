@@ -104,6 +104,19 @@ public class ComandaDao extends DAO {
         //return platoMasPedido + " (" + maxConteo + " pedidos)";
     }
 
+    public void ingresarComanda(Comanda comanda){
+        String sql = "INSERT INTO Comanda (cliente_id, empleado_id, nombre, fecha, cantidad, precioComanda) " +
+                "VALUES ('"+comanda.getIdCliente()+"', '"+comanda.getIdEmpleado()+"', '"+comanda.getNombreComanda()
+                +"', '"+comanda.getFechaActual()+"', '"+comanda.getCantidad()+"', '"+comanda.getPrecioComanda()+"')";
+
+        try{
+            insertarModificarEliminar(sql);
+        }catch (Exception e){
+            System.out.println("Error al ingresar comanda. " + e.getMessage());
+        }
+    }
+
+
 
 }
 
