@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <CustomLevels>
+        <CustomLevel name="PLATO MAS PEDIDO" intLevel="125" />
         <CustomLevel name="VENTA" intLevel="350" />
         <CustomLevel name="MERCADERIA" intLevel="250" />
         <CustomLevel name="PROVEEDOR" intLevel="200" />
@@ -48,6 +49,10 @@
                 <SizeBasedTriggeringPolicy size="100 MB" />
             </Policies>
         </RollingFile>
+
+        <Console name="Plato mas pedido" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
+        </Console>
     </Appenders>
 
     <Loggers>
@@ -71,12 +76,17 @@
             <AppenderRef ref="Cuenta" />
         </Logger>
 
+        <Logger name="Plato mas pedido" level="PLATO MAS PEDIDO" additivity="false">
+            <AppenderRef ref="Plato mas pedido" />
+        </Logger>
+
         <Root level="trace">
             <AppenderRef ref="Venta" />
             <AppenderRef ref="Producto" />
             <AppenderRef ref="Proveedor" />
             <AppenderRef ref="Comanda" />
             <AppenderRef ref="Cuenta" />
+            <AppenderRef ref="Plato mas pedido" />
         </Root>
     </Loggers>
 </Configuration>

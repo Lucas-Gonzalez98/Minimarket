@@ -5,12 +5,17 @@ import entidades.Comanda;
 import modelos.ClienteModelo;
 import modelos.ComandaModelo;
 import modelos.EmpleadoModelo;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class ComandaDao extends DAO {
+    private static final Logger logger = LogManager.getLogger();
+
     private static ComandaDao instance;
     private ComandaModelo comandaModelo;
     private ClienteModelo clienteModelo;
@@ -99,9 +104,7 @@ public class ComandaDao extends DAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("El plato más pedido es: " + platoMasPedido + " (" + cantidad + " pedidos)");
-        //return "hola";
-        //return platoMasPedido + " (" + maxConteo + " pedidos)";
+        logger.log(Level.getLevel("PLATO MAS PEDIDO"),"El plato más pedido fué: " + platoMasPedido + "(cantidad: " + cantidad + ")");
     }
 
     public void ingresarComanda(Comanda comanda){
