@@ -16,7 +16,6 @@ import java.util.Scanner;
 
 public class Metodos extends DAO {
     private static final Logger logger = LogManager.getLogger();
-
     private ClienteModelo clienteModelo;
     private EmpleadoModelo empleadoModelo;
     private ProductoModelo productoModelo;

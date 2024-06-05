@@ -11,7 +11,7 @@
     <Appenders>
         <RollingFile name="Venta" fileName="logs/Ventas.log"
                      filePattern="logs/Ventas-%i.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} ---->" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="100 MB" />
             </Policies>
@@ -19,7 +19,7 @@
 
         <RollingFile name="Producto" fileName="logs/Producto.log"
                      filePattern="logs/Producto-%i.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} ---->" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="100 MB" />
             </Policies>
@@ -27,7 +27,7 @@
 
         <RollingFile name="Proveedor" fileName="logs/Proveedor.log"
                      filePattern="logs/Proveedor-%i.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} ---->" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="100 MB" />
             </Policies>
@@ -35,7 +35,7 @@
 
         <RollingFile name="Comanda" fileName="logs/Comanda.log"
                      filePattern="logs/Comanda-%i.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} ---->" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="100 MB" />
             </Policies>
@@ -43,7 +43,7 @@
 
         <RollingFile name="Cuenta" fileName="logs/Cuenta.log"
                      filePattern="logs/Cuenta-%i.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} ---->" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="100 MB" />
             </Policies>
