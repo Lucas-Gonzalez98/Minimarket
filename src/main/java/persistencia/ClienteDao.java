@@ -1,6 +1,7 @@
 package persistencia;
 
 import entidades.Cliente;
+import entidades.Producto;
 import modelos.ClienteModelo;
 
 import java.sql.*;
@@ -51,10 +52,10 @@ public class ClienteDao extends DAO{
     }
 
     public void listarClientes(){
-        String listaEmpleados = "SELECT id, nombre, apellido FROM Cliente";
+        String listaClientes = "SELECT id, nombre, apellido FROM Cliente";
 
         try (Connection coneccion = conectarBase();
-             PreparedStatement preparedStatement = coneccion.prepareStatement(listaEmpleados);
+             PreparedStatement preparedStatement = coneccion.prepareStatement(listaClientes);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -66,5 +67,24 @@ public class ClienteDao extends DAO{
         } catch (Exception e) {
             System.out.println("Error al listar los clientes: " + e.getMessage());
         }
+    }
+    public Cliente buscarClientePorID(int idCliente) {
+        String listaClientes = "SELECT * FROM Cliente WHERE id='" + idCliente + "'";
+        Cliente cliente = null;
+        try {
+            conexion = conectarBase();
+            sentencia = conexion.createStatement();
+            resultado = sentencia.executeQuery(listaClientes);
+            while (resultado.next()) {
+                cliente = new Cliente();
+                cliente.setId(resultado.getInt(1));
+                cliente.setNombre(resultado.getString(2));
+                cliente.setApellido(resultado.getString(3));
+                cliente.setDireccion(resultado.getString(4));
+            }
+        } catch (Exception e) {
+            System.out.println("Error al listar los clientes: " + e.getMessage());
+        }
+        return cliente;
     }
 }

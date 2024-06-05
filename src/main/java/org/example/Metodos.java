@@ -2,6 +2,9 @@ package org.example;
 
 import entidades.*;
 import modelos.*;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import persistencia.DAO;
 import persistencia.ProductoDao;
 
@@ -12,6 +15,8 @@ import java.sql.Date;
 import java.util.Scanner;
 
 public class Metodos extends DAO {
+    private static final Logger logger = LogManager.getLogger();
+
     private ClienteModelo clienteModelo;
     private EmpleadoModelo empleadoModelo;
     private ProductoModelo productoModelo;
@@ -112,7 +117,7 @@ public class Metodos extends DAO {
         insertarDatosCliente();
         insertarDatosEmpleado();
         insertarDatosProducto();
-//        insertarDatosComanda();
+        insertarDatosComanda();
         insertarDatosProveedor();
         insertarDatosVenta();
         System.out.println("Datos generados Exitosamente");
@@ -192,7 +197,9 @@ public class Metodos extends DAO {
             String nombreCliente = scanner.nextLine();
             System.out.println("Ingrese el apellido del cliente:");
             String apellidoCliente = scanner.nextLine();
+            Producto producto = productoModelo.buscarProductoPorId(idProducto);
             ventaModelo.ingresarVenta(idProducto, apellidoCliente, nombreCliente, nombreEmpleado, cantidad, fecha);
+            logger.log(Level.getLevel("VENTA"),"Se ingreso una venta, Vendedor: " + nombreEmpleado + " Cliente: " + nombreCliente + " " + apellidoCliente + " del producto: " + producto.getNombre() + " Cantidad: " + cantidad + " Precio x Unidad: " + producto.getPrecio());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -210,6 +217,7 @@ public class Metodos extends DAO {
         try {
             proveedorModelo.pagarProveedor(nombreProveedor, cantidadPago);
             pagos.add(cantidadPago);
+            logger.log(Level.getLevel("PROVEEDOR"),"Se pago al proveedor: " + nombreProveedor + " la cantidad de: " + cantidadPago);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -228,6 +236,8 @@ public class Metodos extends DAO {
         scanner.nextLine();
         try {
             productoModelo.ingresarMercaderia(idProducto, cantidad);
+            Producto producto = productoModelo.buscarProductoPorId(idProducto);
+            logger.log(Level.getLevel("MERCADERIA"), "Se ingreso la mercaderia de: " + producto.getNombre() + " por la cantidad de: " + cantidad + " STOCK ACTUALIZADO EN: " + producto.getStock());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -365,6 +375,8 @@ public class Metodos extends DAO {
 
         comandaModelo.solicitarComanda(comanda);
         System.out.println("Comanda solicitada correctamente.");
+        Cliente cliente = clienteModelo.buscarClienteID(idCliente);
+        logger.log(Level.getLevel("COMANDA"), "Se solicita la comanda: " + comanda.getNombreComanda() + " por la cantidad de " + comanda.getCantidad() + " al cliente: " + cliente.getNombre()+ " " + cliente.getApellido());
     }
     public void pagarCuenta() {
         System.out.println("Ha seleccionado pagar cuenta.");

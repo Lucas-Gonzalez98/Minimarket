@@ -28,4 +28,7 @@ public class ClienteModelo {
     public void listarClientes() throws Exception{
         clienteDao.listarClientes();
     }
+    public Cliente buscarClienteID(int idCliente) throws Exception{
+        return clienteDao.buscarClientePorID(idCliente);
+    }
 }
