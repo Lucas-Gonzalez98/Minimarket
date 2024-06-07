@@ -187,7 +187,7 @@ public class ComandaDao extends DAO {
                 double precioComanda = resultSetComanda.getDouble("precioComanda");
                 // Mostrar detalles de las comandas
                 System.out.println("ID: " + id + ", Cliente ID: " + clienteId + ", Nombre: " + nombre + ", Fecha: " + fecha + ", Cantidad: " + cantidad + ", Total: " + precioComanda);
-                logger.log(Level.getLevel("CUENTA"), "Se pago la cuenta del cliente: " + nombreCliente + " " + apellidoCliente + " el total es: " + precioComanda);
+                // .log(Level.getLevel("CUENTA"), "Se pago la cuenta del cliente: " + nombreCliente + " " + apellidoCliente + " el total es: " + precioComanda);
 
             }
             if (!comandaEncontrada) {

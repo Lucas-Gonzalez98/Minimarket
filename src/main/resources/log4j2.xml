@@ -77,7 +77,7 @@
         </Logger>
 
         <Logger name="PlatoMasPedidoLogger" level="PLATO MAS PEDIDO" additivity="false">
-            <AppenderRef ref="PlatoMasPedido" />
+            <AppenderRef ref="Plato mas pedido" />
         </Logger>
 
         <Root level="OFF">
