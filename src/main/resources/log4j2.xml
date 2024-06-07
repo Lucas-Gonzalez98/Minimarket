@@ -76,17 +76,12 @@
             <AppenderRef ref="Cuenta" />
         </Logger>
 
-        <Logger name="Plato mas pedido" level="PLATO MAS PEDIDO" additivity="false">
-            <AppenderRef ref="Plato mas pedido" />
+        <Logger name="PlatoMasPedidoLogger" level="PLATO MAS PEDIDO" additivity="false">
+            <AppenderRef ref="PlatoMasPedido" />
         </Logger>
 
-        <Root level="trace">
-            <AppenderRef ref="Venta" />
-            <AppenderRef ref="Producto" />
-            <AppenderRef ref="Proveedor" />
-            <AppenderRef ref="Comanda" />
-            <AppenderRef ref="Cuenta" />
-            <AppenderRef ref="Plato mas pedido" />
+        <Root level="OFF">
+
         </Root>
     </Loggers>
 </Configuration>

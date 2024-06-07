@@ -15,8 +15,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class ComandaDao extends DAO {
-    private static final Logger logger = LogManager.getLogger();
-
+    private static final Logger platoMasPedidoLogger = LogManager.getLogger("PlatoMasPedidoLogger");
     private static ComandaDao instance;
     private ComandaModelo comandaModelo;
     private ClienteModelo clienteModelo;
@@ -89,14 +88,18 @@ public class ComandaDao extends DAO {
         int cantidad = 0;
 
         try {
-            String query = "SELECT nombre, cantidad FROM Comanda WHERE cantidad = (SELECT MAX(cantidad) FROM Comanda)";
+            String query = "SELECT nombre, SUM(cantidad) AS total_cantidad " +
+                    "FROM Comanda " +
+                    "GROUP BY nombre " +
+                    "ORDER BY total_cantidad DESC " +
+                    "LIMIT 1";
             Connection connection = conectarBase();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
                 platoMasPedido = resultSet.getString("nombre");
-                cantidad = resultSet.getInt("cantidad");
+                cantidad = resultSet.getInt("total_cantidad");
             }
 
             resultSet.close();
@@ -105,7 +108,7 @@ public class ComandaDao extends DAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        logger.log(Level.getLevel("PLATO MAS PEDIDO"),"El plato más pedido fué: " + platoMasPedido + "(cantidad: " + cantidad + ")");
+        platoMasPedidoLogger.log(Level.getLevel("PLATO MAS PEDIDO"), "El plato más pedido fué: " + platoMasPedido + " (cantidad: " + cantidad + ")");
     }
 
     public void ingresarComanda(Comanda comanda){

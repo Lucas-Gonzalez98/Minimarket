@@ -18,8 +18,8 @@ public class Main {
         int opcion;
         Metodos mt = Metodos.getInstance();
         mt.crearTablas();
-        mt.ingresoDePagos();
-        mt.insertarDatos();
+        //mt.ingresoDePagos();
+        //mt.insertarDatos();
 
         do {
             //prueba git

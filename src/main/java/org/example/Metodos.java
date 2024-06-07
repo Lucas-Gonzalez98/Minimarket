@@ -15,7 +15,11 @@ import java.sql.Date;
 import java.util.Scanner;
 
 public class Metodos extends DAO {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger ingresoVentaLogger = LogManager.getLogger("IngresoVentaLogger");
+    private static final Logger ingresoMercaderiaLogger = LogManager.getLogger("IngresoMercaderiaLogger");
+    private static final Logger proveedorLogger = LogManager.getLogger("ProveedorLogger");
+    private static final Logger comandaLogger = LogManager.getLogger("ComandaLogger");
+    private static final Logger cuentaLogger = LogManager.getLogger("CuentaLogger");
     private ClienteModelo clienteModelo;
     private EmpleadoModelo empleadoModelo;
     private ProductoModelo productoModelo;
@@ -198,7 +202,7 @@ public class Metodos extends DAO {
             String apellidoCliente = scanner.nextLine();
             Producto producto = productoModelo.buscarProductoPorId(idProducto);
             ventaModelo.ingresarVenta(idProducto, apellidoCliente, nombreCliente, nombreEmpleado, cantidad, fecha);
-            logger.log(Level.getLevel("VENTA"),"Se ingreso una venta, Vendedor: " + nombreEmpleado + " Cliente: " + nombreCliente + " " + apellidoCliente + " del producto: " + producto.getNombre() + " Cantidad: " + cantidad + " Precio x Unidad: " + producto.getPrecio());
+            ingresoVentaLogger.log(Level.getLevel("VENTA"),"Se ingreso una venta, Vendedor: " + nombreEmpleado + " Cliente: " + nombreCliente + " " + apellidoCliente + " Producto: " + producto.getNombre() + " Cantidad: " + cantidad + " Precio x Unidad: " + producto.getPrecio());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -216,7 +220,7 @@ public class Metodos extends DAO {
         try {
             proveedorModelo.pagarProveedor(nombreProveedor, cantidadPago);
             pagos.add(cantidadPago);
-            logger.log(Level.getLevel("PROVEEDOR"),"Se pago al proveedor: " + nombreProveedor + " la cantidad de: " + cantidadPago);
+            proveedorLogger.log(Level.getLevel("PROVEEDOR"),"Se pago al proveedor: " + nombreProveedor + " la cantidad de: " + cantidadPago);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -236,7 +240,7 @@ public class Metodos extends DAO {
         try {
             productoModelo.ingresarMercaderia(idProducto, cantidad);
             Producto producto = productoModelo.buscarProductoPorId(idProducto);
-            logger.log(Level.getLevel("MERCADERIA"), "Se ingreso la mercaderia de: " + producto.getNombre() + " por la cantidad de: " + cantidad + " STOCK ACTUALIZADO EN: " + producto.getStock());
+            ingresoMercaderiaLogger.log(Level.getLevel("MERCADERIA"), "Se ingreso la mercaderia de: " + producto.getNombre() + " por la cantidad de: " + cantidad + " STOCK ACTUALIZADO EN: " + producto.getStock());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -375,7 +379,7 @@ public class Metodos extends DAO {
         comandaModelo.solicitarComanda(comanda);
         System.out.println("Comanda solicitada correctamente.");
         Cliente cliente = clienteModelo.buscarClienteID(idCliente);
-        logger.log(Level.getLevel("COMANDA"), "Se solicita la comanda: " + comanda.getNombreComanda() + " por la cantidad de " + comanda.getCantidad() + " al cliente: " + cliente.getNombre()+ " " + cliente.getApellido());
+        comandaLogger.log(Level.getLevel("COMANDA"), "Se solicita la comanda: " + comanda.getNombreComanda() + " por la cantidad de " + comanda.getCantidad() + " al cliente: " + cliente.getNombre()+ " " + cliente.getApellido());
     }
     public void pagarCuenta() {
         System.out.println("Ha seleccionado pagar cuenta.");

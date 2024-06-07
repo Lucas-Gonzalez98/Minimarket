@@ -204,28 +204,30 @@ public class VentaDao extends DAO{
     }
 
     public void buscarVentaDiaria(Date fecha) throws SQLException {
-        String sql = "SELECT * FROM Venta WHERE fecha = '"+fecha+"'";
+        String sql = "SELECT * FROM Venta WHERE fecha = ?";
 
-        try{
+        try {
             conexion = conectarBase();
-            sentencia = conexion.createStatement();
-            resultado = sentencia.executeQuery(sql);
+            PreparedStatement sentencia = conexion.prepareStatement(sql);
+            sentencia.setDate(1, new java.sql.Date(fecha.getTime())); // Establecer el parámetro de fecha
+            resultado = sentencia.executeQuery();
 
-            if(!resultado.next()){
+            int totalVentas = 0;
+            while (resultado.next()) {
+                int productoId = resultado.getInt(2);
+                int cantidad = resultado.getInt(5);
+                totalVentas += cantidad;
+                Producto producto = productoModelo.buscarProductoPorId(productoId);
+                System.out.println("[" + producto.getNombre() + "] - Cantidad vendida:" + cantidad);
+            }
+
+            if (totalVentas == 0) {
                 System.out.println("No hubo ventas en la fecha seleccionada.");
             } else {
-                int totalVentas = 0;
-                while(resultado.next()){
-                    int productoId = resultado.getInt(2);
-                    int cantidad = resultado.getInt(5);
-                    totalVentas += cantidad;
-                    Producto producto = productoModelo.buscarProductoPorId(productoId);
-                    System.out.println("[" +producto.getNombre() + "] - Cantidad vendida:" +cantidad);
-                }
                 System.out.println("TOTAL DE VENTAS = " + totalVentas);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error al buscar venta." + e.getMessage());
         }
 
