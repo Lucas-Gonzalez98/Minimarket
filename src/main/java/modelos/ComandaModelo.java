@@ -35,4 +35,8 @@ public class ComandaModelo {
     public void solicitarComanda(Comanda comanda) {
         comandaDao.ingresarComanda(comanda);
     }
+
+    public void pagarCuenta(){
+        comandaDao.pagarCuenta();
+    }
 }

@@ -25,7 +25,7 @@ public class Metodos extends DAO {
 
     private ArrayList<Double> pagos = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
-
+    
     // Constructor privado para evitar instanciación
     private Metodos() {
         clienteModelo = ClienteModelo.getInstance();
@@ -379,7 +379,7 @@ public class Metodos extends DAO {
     }
     public void pagarCuenta() {
         System.out.println("Ha seleccionado pagar cuenta.");
-        //codigo
+        comandaModelo.pagarCuenta();
     }
     public void informacionEstadistica() {
         System.out.println("Ha seleccionado información estadística de platos más pedidos.");

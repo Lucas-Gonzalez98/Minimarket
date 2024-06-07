@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class ComandaDao extends DAO {
     private static final Logger logger = LogManager.getLogger();
@@ -118,8 +119,81 @@ public class ComandaDao extends DAO {
             System.out.println("Error al ingresar comanda. " + e.getMessage());
         }
     }
+    public void pagarCuenta() {
+        System.out.println("Ingrese el nombre del Empleado a cargo de la comanda");
+        Scanner sc = new Scanner(System.in);
+        String nombreEmpleado = sc.next();
+        System.out.println("Ingrese el apellido del Empleado a cargo de la comanda");
+        String apellidoEmpleado = sc.next();
+        System.out.println("Ingrese el nombre del Cliente a cargo de la comanda");
+        String nombreCliente = sc.next();
+        System.out.println("Ingrese el apellido del Cliente a cargo de la comanda");
+        String apellidoCliente = sc.next();
 
+        Connection connection = null;
+        PreparedStatement preparedStatementBuscarEmpleado = null;
+        PreparedStatement preparedStatementBuscarCliente = null;
+        PreparedStatement preparedStatementBuscarComanda = null;
+        ResultSet resultSetEmpleado = null;
+        ResultSet resultSetCliente = null;
+        ResultSet resultSetComanda = null;
 
+        try {
+            connection = conectarBase();
 
+            // Consulta para obtener las comandas del empleado
+            String seleccionarEmpleado = "SELECT * FROM Empleado WHERE nombre = ? AND apellido = ?";
+            preparedStatementBuscarEmpleado = connection.prepareStatement(seleccionarEmpleado);
+            preparedStatementBuscarEmpleado.setString(1, nombreEmpleado);
+            preparedStatementBuscarEmpleado.setString(2, apellidoEmpleado);
+            resultSetEmpleado = preparedStatementBuscarEmpleado.executeQuery();
+            if (!resultSetEmpleado.next()) {
+                System.out.println("No se encontró el Empleado con nombre: " + nombreEmpleado);
+                return;
+            }
+            int idEmpleado = resultSetEmpleado.getInt("id");
+            System.out.println("ID del Empleado: " + idEmpleado); // Depuración
+
+            String seleccionarCliente = "SELECT * FROM Cliente WHERE nombre = ? AND apellido = ?";
+            preparedStatementBuscarCliente = connection.prepareStatement(seleccionarCliente);
+            preparedStatementBuscarCliente.setString(1, nombreCliente);
+            preparedStatementBuscarCliente.setString(2, apellidoCliente);
+            resultSetCliente = preparedStatementBuscarCliente.executeQuery();
+            if (!resultSetCliente.next()) {
+                System.out.println("No se encontró el Cliente con nombre: " + nombreCliente);
+                return;
+            }
+            int idCliente = resultSetCliente.getInt("id");
+            System.out.println("ID del Cliente: " + idCliente); // Depuración
+
+            String seleccionarComanda = "SELECT * FROM Comanda WHERE empleado_id = ? AND cliente_id = ?";
+            preparedStatementBuscarComanda = connection.prepareStatement(seleccionarComanda);
+            preparedStatementBuscarComanda.setInt(1, idEmpleado);
+            preparedStatementBuscarComanda.setInt(2, idCliente);
+            resultSetComanda = preparedStatementBuscarComanda.executeQuery();
+
+            System.out.println("Platos a cargo del empleado: " + nombreEmpleado + " " + apellidoEmpleado);
+            boolean comandaEncontrada = false;
+            while (resultSetComanda.next()) {
+                comandaEncontrada = true;
+                int id = resultSetComanda.getInt("id");
+                int clienteId = resultSetComanda.getInt("cliente_id");
+                String nombre = resultSetComanda.getString("nombre");
+                String fecha = resultSetComanda.getString("fecha");
+                int cantidad = resultSetComanda.getInt("cantidad");
+                double precioComanda = resultSetComanda.getDouble("precioComanda");
+                // Mostrar detalles de las comandas
+                System.out.println("ID: " + id + ", Cliente ID: " + clienteId + ", Nombre: " + nombre + ", Fecha: " + fecha + ", Cantidad: " + cantidad + ", Total: " + precioComanda);
+                logger.log(Level.getLevel("CUENTA"), "Se pago la cuenta del cliente: " + nombreCliente + " " + apellidoCliente + " el total es: " + precioComanda);
+
+            }
+            if (!comandaEncontrada) {
+                System.out.println("No se encontraron comandas para el empleado y cliente especificados.");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
 }
 
