@@ -19,7 +19,7 @@ public class Metodos extends DAO {
     private static final Logger ingresoMercaderiaLogger = LogManager.getLogger("IngresoMercaderiaLogger");
     private static final Logger proveedorLogger = LogManager.getLogger("ProveedorLogger");
     private static final Logger comandaLogger = LogManager.getLogger("ComandaLogger");
-    private static final Logger cuentaLogger = LogManager.getLogger("CuentaLogger");
+    private static final Logger mensajeEmail = LogManager.getLogger("envioEmailProducto");
     private ClienteModelo clienteModelo;
     private EmpleadoModelo empleadoModelo;
     private ProductoModelo productoModelo;
@@ -240,6 +240,7 @@ public class Metodos extends DAO {
         try {
             productoModelo.ingresarMercaderia(idProducto, cantidad);
             Producto producto = productoModelo.buscarProductoPorId(idProducto);
+            mensajeEmail.log(Level.getLevel("MERCADERIA"), "Se ingreso mercaderia del producto: " + producto.getNombre() + " Precio: " + producto.getPrecio() + " por la cantidad de: " + cantidad +  " STOCK ACTUALIZADO EN: " + producto.getStock());
             ingresoMercaderiaLogger.log(Level.getLevel("MERCADERIA"), "Se ingreso la mercaderia de: " + producto.getNombre() + " por la cantidad de: " + cantidad + " STOCK ACTUALIZADO EN: " + producto.getStock());
         } catch (SQLException e) {
             e.printStackTrace();

@@ -16,6 +16,8 @@ import java.util.Scanner;
 
 public class ComandaDao extends DAO {
     private static final Logger platoMasPedidoLogger = LogManager.getLogger("PlatoMasPedidoLogger");
+    private static final Logger cuentaLogger = LogManager.getLogger("CuentaLogger");
+
     private static ComandaDao instance;
     private ComandaModelo comandaModelo;
     private ClienteModelo clienteModelo;
@@ -187,7 +189,7 @@ public class ComandaDao extends DAO {
                 double precioComanda = resultSetComanda.getDouble("precioComanda");
                 // Mostrar detalles de las comandas
                 System.out.println("ID: " + id + ", Cliente ID: " + clienteId + ", Nombre: " + nombre + ", Fecha: " + fecha + ", Cantidad: " + cantidad + ", Total: " + precioComanda);
-                // .log(Level.getLevel("CUENTA"), "Se pago la cuenta del cliente: " + nombreCliente + " " + apellidoCliente + " el total es: " + precioComanda);
+                cuentaLogger.log(Level.getLevel("CUENTA"), "Se pago la cuenta del cliente: " + nombreCliente + " " + apellidoCliente + " el total es: " + precioComanda);
 
             }
             if (!comandaEncontrada) {

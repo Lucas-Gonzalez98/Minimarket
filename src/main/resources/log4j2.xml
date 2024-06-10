@@ -10,6 +10,7 @@
     </CustomLevels>
 
     <Appenders>
+
         <RollingFile name="Venta" fileName="logs/Ventas.log"
                      filePattern="logs/Ventas-%i.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
@@ -53,6 +54,13 @@
         <Console name="Plato mas pedido" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
         </Console>
+        <SMTP name="SMTP" subject="Ingreso De Mercaderia" to="jmonetti@frm.utn.edu.ar"
+              from="lucasn.gonzalez@alumnos.frm.utn.edu.ar" smtpHost="smtp.alumnos.frm.utn.edu.ar" smtpPort="25"
+              smtpUsername="lgit ucasn.gonzalez@alumnos.frm.utn.edu.ar" smtpPassword="contraseña" smtpProtocol="smtp">
+
+            <ThresholdFilter level="MERCADERIA" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
+        </SMTP>
     </Appenders>
 
     <Loggers>
@@ -78,6 +86,9 @@
 
         <Logger name="PlatoMasPedidoLogger" level="PLATO MAS PEDIDO" additivity="false">
             <AppenderRef ref="Plato mas pedido" />
+        </Logger>
+        <Logger name="envioEmailProducto" level="MERCADERIA" additivity="false">
+            <AppenderRef ref="SMTP" />
         </Logger>
 
         <Root level="OFF">
